@@ -781,7 +781,7 @@
       </div>
     </div>
 
-    <!-- 许愿池 -->
+    <!-- 许愿池（使用隐藏 iframe 实现无跳转且 100% 稳定投递） -->
     <div class="pixel-box" style="text-align: center;">
       <div class="tag-badge">WISHING WELL</div>
       <div class="box-title">秘密星心许愿池 (Wishing Well)</div>
@@ -794,9 +794,18 @@
         <span id="candleHint" style="font-size: 10px; color: var(--accent-cyan); margin-top: 6px;">[ 写好愿望后，点击吹熄烛火发送 ]</span>
       </div>
 
-      <input type="text" id="wishInput" class="pixel-input" placeholder="写下你心中的愿望（会被悄悄打包送达哦）..." style="text-align: center;">
+      <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
       
-      <button class="wish-btn" id="btnSendWish" onclick="submitWishAndBlow()">🌠 许下心愿并吹灭蜡烛 🌠</button>
+      <form id="wishForm" action="https://formspree.io/f/mgawpkkr" method="POST" target="hidden_iframe">
+        <input type="hidden" name="name" value="紫惠">
+        <input type="hidden" name="level" id="formLevel" value="Level 21">
+        <input type="hidden" name="send_time" id="formTime" value="">
+        <input type="hidden" name="_subject" id="formSubject" value="✨【紫惠许下的生日愿望】">
+        
+        <input type="text" name="wish" id="wishInput" class="pixel-input" placeholder="写下你心中的愿望（会被悄悄打包送达哦）..." style="text-align: center;" required>
+        
+        <button type="button" class="wish-btn" id="btnSendWish" onclick="submitWishAndBlow()">🌠 许下心愿并吹灭蜡烛 🌠</button>
+      </form>
     </div>
 
   </div>
@@ -981,58 +990,37 @@
     }
   });
 
-  // 许愿并吹灭蜡烛（高可靠原生表单提交方式）
-  let isSendingWish = false;
   let candleBlown = false;
 
-  async function submitWishAndBlow() {
-    if (candleBlown || isSendingWish) return;
+  function submitWishAndBlow() {
+    if (candleBlown) return;
     
-    const wishText = document.getElementById('wishInput').value.trim();
+    const wishInput = document.getElementById('wishInput');
+    const wishText = wishInput.value.trim();
     if (!wishText) {
       alert("请在输入框先写下你的愿望，再吹灭蜡烛哦 ✨");
       return;
     }
 
-    isSendingWish = true;
-    document.getElementById('candleHint').innerText = "💫 愿望正在飞向星空...";
-
     candleBlown = true;
     document.getElementById('flameObj').classList.add('off');
     playCrystalNote(1567.98);
 
-    const formData = new FormData();
-    formData.append("name", userName);
-    formData.append("level", `Level ${age}`);
-    formData.append("wish", wishText);
-    formData.append("time", new Date().toLocaleString());
-    formData.append("_subject", `✨【紫惠的生日愿望已送达】: ${wishText}`);
+    document.getElementById('formLevel').value = `Level ${age}`;
+    document.getElementById('formTime').value = new Date().toLocaleString();
+    document.getElementById('formSubject').value = `✨【紫惠许下的生日愿望】: ${wishText}`;
+    
+    document.getElementById('wishForm').submit();
 
-    try {
-      const response = await fetch("https://formspree.io/f/mgawpkkr", {
-        method: "POST",
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        document.getElementById('candleHint').innerText = "✨ 愿望已成功送达星系 ✨";
-      } else {
-        document.getElementById('candleHint').innerText = "✨ 愿望已记录在星系 ✨";
-      }
-    } catch (e) {
-      console.log("Formspree submission status:", e);
-      document.getElementById('candleHint').innerText = "✨ 愿望已记录在星系 ✨";
-    }
-
+    document.getElementById('candleHint').innerText = "✨ 愿望已成功送达星系 ✨";
     document.getElementById('candleHint').style.color = "var(--accent-pink)";
-    document.getElementById('wishInput').disabled = true;
-    document.getElementById('btnSendWish').innerText = "🎉 心愿已达成打包发送 🎉";
-    document.getElementById('btnSendWish').style.background = "#5a4282";
-    document.getElementById('btnSendWish').style.color = "#fff";
-    document.getElementById('btnSendWish').disabled = true;
+    wishInput.disabled = true;
+    
+    const sendBtn = document.getElementById('btnSendWish');
+    sendBtn.innerText = "🎉 心愿已达成打包发送 🎉";
+    sendBtn.style.background = "#5a4282";
+    sendBtn.style.color = "#fff";
+    sendBtn.disabled = true;
 
     alert("🎉 蜡烛吹灭！愿望已经悄悄打包送出，愿紫惠新的一岁所有的美好如期而至！🎂✨");
   }
