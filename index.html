@@ -807,7 +807,6 @@
   let age = 21;
   const userName = "紫惠";
 
-  // 本地/线上相对音频路径
   const songs = [
     {
       name: "夢田",
@@ -982,6 +981,7 @@
     }
   });
 
+  // 许愿并吹灭蜡烛（高可靠原生表单提交方式）
   let isSendingWish = false;
   let candleBlown = false;
 
@@ -1001,22 +1001,32 @@
     document.getElementById('flameObj').classList.add('off');
     playCrystalNote(1567.98);
 
+    const formData = new FormData();
+    formData.append("name", userName);
+    formData.append("level", `Level ${age}`);
+    formData.append("wish", wishText);
+    formData.append("time", new Date().toLocaleString());
+    formData.append("_subject", `✨【紫惠的生日愿望已送达】: ${wishText}`);
+
     try {
-      await fetch(`https://formspree.io/f/mqkrvkky`, {
+      const response = await fetch("https://formspree.io/f/mgawpkkr", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          寿星: userName,
-          年龄等级: `Level ${age}`,
-          紫惠的心愿: wishText,
-          发送时间: new Date().toLocaleString()
-        })
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
       });
+
+      if (response.ok) {
+        document.getElementById('candleHint').innerText = "✨ 愿望已成功送达星系 ✨";
+      } else {
+        document.getElementById('candleHint').innerText = "✨ 愿望已记录在星系 ✨";
+      }
     } catch (e) {
-      console.log("Wish sent notification fallback");
+      console.log("Formspree submission status:", e);
+      document.getElementById('candleHint').innerText = "✨ 愿望已记录在星系 ✨";
     }
 
-    document.getElementById('candleHint').innerText = "✨ 愿望已成功送达星系 ✨";
     document.getElementById('candleHint').style.color = "var(--accent-pink)";
     document.getElementById('wishInput').disabled = true;
     document.getElementById('btnSendWish').innerText = "🎉 心愿已达成打包发送 🎉";
