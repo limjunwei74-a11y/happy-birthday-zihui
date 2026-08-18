@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Happy Birthday 紫惠 · 星空专属生日庆典</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #120924;
+    --card-bg: #1c1033;
+    --card-inner: #160c29;
+    --border-pink: #f596aa;
+    --border-light: #443366;
+    --accent-pink: #ff7597;
+    --accent-yellow: #ffd15c;
+    --accent-cyan: #70f3ff;
+    --accent-purple: #c490e4;
+    --text-main: #f3f0f8;
+    --font-pixel: 'Press Start 2P', 'Noto Sans SC', monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Noto Sans SC', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px 10px 40px;
+    background-image: 
+      radial-gradient(circle at 50% 30%, #26114a 0%, transparent 70%),
+      radial-gradient(#4a2b77 1px, transparent 1px);
+    background-size: 100% 100%, 24px 24px;
+    overflow-x: hidden;
+  }
+
+  .screen-container {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .pixel-box {
+    width: 100%;
+    background: var(--card-bg);
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 3px var(--bg-dark), 0 0 15px rgba(255, 117, 151, 0.25);
+    border-radius: 4px;
+    padding: 20px 16px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .pixel-box-inner {
+    background: var(--card-inner);
+    border: 2px solid var(--border-light);
+    border-radius: 4px;
+    padding: 14px;
+    margin-top: 14px;
+  }
+
+  .marquee-oval {
+    width: 290px;
+    height: 110px;
+    border: 3px dashed var(--accent-yellow);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto 25px;
+    box-shadow: 0 0 15px rgba(255, 209, 92, 0.4), inset 0 0 15px rgba(255, 209, 92, 0.2);
+    position: relative;
+    background: rgba(28, 16, 51, 0.6);
+  }
+
+  .marquee-oval h1 {
+    font-family: var(--font-pixel);
+    font-size: 16px;
+    color: #fff;
+    text-shadow: 2px 2px var(--accent-pink), -1px -1px var(--accent-cyan);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .marquee-oval p {
+    font-size: 11px;
+    color: var(--accent-cyan);
+    letter-spacing: 1px;
+  }
+
+  .tag-badge {
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    background: var(--accent-pink);
+    color: #fff;
+    font-family: var(--font-pixel);
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  .box-title {
+    text-align: center;
+    color: var(--accent-yellow);
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    color: #c9bade;
+    margin-bottom: 6px;
+  }
+
+  .pixel-input {
+    width: 100%;
+    background: #0d061a;
+    border: 2px solid #5a4282;
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 14px;
+    outline: none;
+    border-radius: 4px;
+    font-family: inherit;
+    user-select: text;
+    -webkit-user-select: text;
+  }
+  .pixel-input:focus {
+    border-color: var(--accent-pink);
+  }
+
+  .counter-box {
+    display: flex;
+    align-items: center;
+    background: #0d061a;
+    border: 2px solid #5a4282;
+    border-radius: 4px;
+    height: 42px;
+  }
+
+  .counter-btn {
+    width: 44px;
+    height: 100%;
+    background: #2b184a;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: var(--font-pixel);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .counter-btn:active { background: var(--accent-pink); }
+
+  .counter-val {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-pixel);
+    font-size: 12px;
+    color: #fff;
+  }
+
+  .btn-start {
+    width: 100%;
+    background: #ff85a1;
+    border: 3px solid #fff;
+    color: #120924;
+    padding: 14px;
+    font-family: var(--font-pixel);
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 0 #b3395b;
+    border-radius: 4px;
+    transition: transform 0.05s;
+    font-weight: bold;
+    text-align: center;
+  }
+  .btn-start:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #b3395b;
+  }
+
+  .music-toggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 38px;
+    height: 38px;
+    background: rgba(196, 144, 228, 0.25);
+    border: 2px solid var(--accent-purple);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+  }
+  .music-toggle.playing {
+    animation: pulse 1.5s infinite;
+    background: var(--accent-purple);
+    color: #120924;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(196, 144, 228, 0.7); }
+    50% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(196, 144, 228, 0); }
+  }
+
+  .hidden { display: none !important; }
+
+  .letter-stage {
+    text-align: center;
+    width: 100%;
+  }
+
+  .envelope-wrapper {
+    width: 100%;
+    height: 190px;
+    background: #341e5b;
+    border: 3px solid #fff;
+    border-radius: 6px;
+    margin: 25px 0;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(196, 144, 228, 0.3);
+    overflow: hidden;
+  }
+
+  .envelope-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    border-top: 90px solid #482b7c;
+    border-left: 175px solid transparent;
+    border-right: 175px solid transparent;
+  }
+
+  .envelope-stamp {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-yellow);
+    border: 2px dashed #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    font-size: 22px;
+  }
+
+  .dialog-bubble {
+    background: rgba(43, 24, 74, 0.9);
+    border: 2px solid #5a4282;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+
+  .mascot-display {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .pixel-avatar {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    transition: transform 0.2s;
+  }
+
+  .anim-jump { animation: jumpAnim 0.6s infinite alternate ease-in-out; }
+  .anim-breathe { animation: breatheAnim 1.8s infinite ease-in-out; }
+  .anim-spin { animation: spinAnim 1.2s infinite linear; }
+
+  @keyframes jumpAnim { 0% { transform: translateY(0); } 100% { transform: translateY(-16px); } }
+  @keyframes breatheAnim { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+  @keyframes spinAnim { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  .custom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 11px;
+  }
+  .custom-row span { color: #b7a4d6; }
+  .option-btns {
+    display: flex;
+    gap: 6px;
+  }
+  .opt-btn {
+    background: #2b184a;
+    border: 1px solid #5a4282;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .opt-btn.active {
+    background: var(--accent-pink);
+    border-color: #fff;
+    color: #120924;
+    font-weight: bold;
+  }
+
+  .pet-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .pet-card {
+    background: #110724;
+    border: 1px solid #443366;
+    padding: 10px 4px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .pet-card:hover { border-color: var(--accent-pink); }
+  .pet-avatar { font-size: 26px; margin-bottom: 4px; }
+  .pet-name { font-size: 10px; color: #b7a4d6; font-family: var(--font-pixel); }
+
+  .record-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 12px 0 16px;
+  }
+
+  .record-disk {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffd15c 14%, #c92f6d 15%, #c92f6d 38%, #ffd15c 40%, #ffd15c 42%, #221535 43%);
+    border: 3px solid #ffd15c;
+    box-shadow: 0 0 16px rgba(255, 209, 92, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+  }
+
+  .record-disk.spinning {
+    animation: diskSpin 2.5s infinite linear;
+    box-shadow: 0 0 22px rgba(255, 117, 151, 0.6);
+  }
+
+  @keyframes diskSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .disk-status {
+    margin-top: 8px;
+    font-size: 11px;
+    color: #a491c3;
+  }
+
+  .control-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .btn-play-toggle {
+    background: #2b184a;
+    border: 2px solid #fff;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 6px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0 2px 0 #000;
+  }
+  .btn-play-toggle.playing {
+    background: var(--accent-pink);
+    color: #120924;
+  }
+
+  .vol-group {
+    display: flex;
+    background: #0f071d;
+    border: 1px solid #5a4282;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .vol-btn {
+    background: transparent;
+    border: none;
+    color: #a491c3;
+    font-size: 11px;
+    padding: 5px 8px;
+    cursor: pointer;
+  }
+  .vol-btn.active {
+    background: var(--accent-pink);
+    color: #120924;
+    font-weight: bold;
+  }
+
+  .mb-desc {
+    font-size: 11px;
+    color: #b7a4d6;
+    text-align: center;
+    line-height: 1.6;
+    margin: 10px 0;
+  }
+
+  .key-interactive-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent-yellow);
+    font-size: 11px;
+    margin: 14px 0 8px;
+    line-height: 1.4;
+  }
+
+  .piano-keys {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 16px;
+  }
+
+  .piano-key {
+    background: #5b4280;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    padding: 10px 0 6px;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    box-shadow: 0 3px 0 #200f38;
+    transition: transform 0.05s;
+  }
+  .piano-key:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #200f38;
+    background: var(--accent-pink);
+  }
+  .piano-key.pink-key {
+    background: #ff85a1;
+    color: #120924;
+    font-weight: bold;
+  }
+  .piano-key span {
+    display: block;
+    font-size: 11px;
+    margin-top: 3px;
+  }
+
+  .playlist-box {
+    background: #110724;
+    border: 2px solid #5a4282;
+    border-radius: 4px;
+    padding: 6px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .track-tab {
+    background: transparent;
+    border: 2px solid transparent;
+    color: #a491c3;
+    padding: 8px 2px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-tab.active {
+    background: #ff85a1;
+    color: #120924;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 0 #000;
+  }
+
+  .candle-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 0;
+    cursor: pointer;
+  }
+  .flame {
+    width: 14px;
+    height: 20px;
+    background: #ffd15c;
+    border-radius: 50% 50% 35% 35%;
+    box-shadow: 0 0 12px #ff7597, 0 0 20px #ffd15c;
+    animation: flicker 0.2s infinite alternate;
+  }
+  .flame.off { display: none; }
+  @keyframes flicker {
+    0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+    100% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+  }
+  .wick { width: 3px; height: 6px; background: #fff; }
+  .candle-body {
+    width: 28px;
+    height: 38px;
+    background: #ff85a1;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+  }
+
+  .wish-btn {
+    width: 100%;
+    background: #70f3ff;
+    border: 2px solid #fff;
+    color: #120924;
+    padding: 10px;
+    font-family: var(--font-pixel);
+    font-size: 11px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 3px 0 #3aa1ad;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  .wish-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #3aa1ad;
+  }
+</style>
+</head>
+<body>
+
+<audio id="realAudioPlayer" preload="auto" loop></audio>
+
+<div class="music-toggle" id="musicToggle" title="背景八音盒">🔔</div>
+
+<div class="screen-container">
+
+  <!-- 阶段 1：定制配置台 -->
+  <div id="stageConfig" class="pixel-box">
+    <div class="tag-badge">CONFIG STATION</div>
+    
+    <div class="marquee-oval">
+      <h1>HAPPY BIRTHDAY</h1>
+      <p>星夜暖光生日礼即将送达</p>
+    </div>
+
+    <div class="box-title">【 录入寿星讯息 · 降落星空门扉 】</div>
+
+    <div class="form-group">
+      <label>寿星尊称 Name (已为你锁定)：</label>
+      <input type="text" id="inputName" class="pixel-input" value="紫惠" readonly style="color:var(--accent-yellow); font-weight:bold; cursor:not-allowed;">
+    </div>
+
+    <div class="form-group">
+      <label>年龄等级 Level (新的一岁等级)：</label>
+      <div class="counter-box">
+        <button class="counter-btn" id="btnDec">-</button>
+        <div class="counter-val">LEVEL <span id="valAge">21</span> 岁</div>
+        <button class="counter-btn" id="btnInc">+</button>
+      </div>
+    </div>
+
+    <button class="btn-start" id="btnLaunch">🚀 PRESS START TO PLAY 🚀</button>
+  </div>
+
+  <!-- 阶段 2：神秘信件拆封 -->
+  <div id="stageLetter" class="pixel-box letter-stage hidden">
+    <div class="tag-badge">LEVEL UP! +1 YEAR</div>
+    
+    <h2 style="font-size: 20px; margin: 15px 0 8px;">收到了神秘信件</h2>
+    <p style="font-size: 12px; color: #b7a4d6; line-height: 1.6;">紫惠，你收到了一份来自像素星空的专属包裹，点按打开你的信笺</p>
+
+    <div class="envelope-wrapper" id="envelopeBox">
+      <div class="envelope-stamp">💖</div>
+    </div>
+
+    <p style="font-size: 12px; color: var(--accent-yellow); font-weight: bold;">✨ 点击解锁你的专属惊喜 ✨</p>
+    <p style="font-size: 10px; color: #7f69a5; font-family: var(--font-pixel); margin-top: 6px;">- PRESS BUTTON TO PLAY -</p>
+  </div>
+
+  <!-- 阶段 3：主舞台与交互卡片 -->
+  <div id="stageMain" class="hidden" style="width: 100%;">
+    
+    <div class="pixel-box" style="padding: 14px; text-align: center;">
+      <div style="font-family: var(--font-pixel); font-size: 11px; color: var(--accent-pink);">✦ HOLIDAY CELEBRATION ✦</div>
+      <div style="font-size: 14px; margin-top: 4px; font-weight: bold;">【<span class="render-name">紫惠</span>】专属生日庆典 已经开幕 🌸</div>
+    </div>
+
+    <div class="pixel-box">
+      <div class="tag-badge">CUSTOMIZE</div>
+      <div style="position: absolute; right: 15px; top: -10px; background: var(--accent-yellow); color:#000; font-size: 10px; padding: 2px 8px; font-family: var(--font-pixel); border: 2px solid #fff;">
+        LEVEL: <span class="render-age">21</span>
+      </div>
+
+      <div class="dialog-bubble" id="mascotBubble">
+        哇！我是闪闪发光的璀璨幸运星，亮晶晶照耀着最可爱的 <b class="render-name" style="color:var(--accent-yellow)">紫惠</b> 哦 ⭐
+      </div>
+
+      <div class="mascot-display">
+        <div class="pixel-avatar anim-jump" id="avatarObj" style="display:flex; justify-content:center; align-items:center; font-size: 46px;">
+          ⭐
+        </div>
+      </div>
+
+      <div style="text-align: center; color: var(--accent-pink); font-size: 14px; font-weight: bold; margin-bottom: 12px; font-family: var(--font-pixel);">
+        可定制小寿星
+      </div>
+
+      <div class="pixel-box-inner">
+        <div class="custom-row">
+          <span>形象 款式:</span>
+          <div class="option-btns" id="typeGroup">
+            <button class="opt-btn active" data-val="⭐">星★</button>
+            <button class="opt-btn" data-val="🐱">喵🐱</button>
+            <button class="opt-btn" data-val="☁️">嘟☁️</button>
+          </div>
+        </div>
+
+        <div class="custom-row">
+          <span>体色 染料:</span>
+          <div class="option-btns" id="colorGroup">
+            <button class="opt-btn active" data-color="#ffd15c">💛 黄</button>
+            <button class="opt-btn" data-color="#ff7597">💗 粉</button>
+            <button class="opt-btn" data-color="#70f3ff">🩵 蓝</button>
+          </div>
+        </div>
+
+        <div class="custom-row">
+          <span>律动 特效:</span>
+          <div class="option-btns" id="animGroup">
+            <button class="opt-btn active" data-anim="anim-jump">极跃</button>
+            <button class="opt-btn" data-anim="anim-breathe">微息</button>
+            <button class="opt-btn" data-anim="anim-spin">狂旋</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 14px; font-size: 12px; color: var(--accent-yellow); line-height: 1.6;">
+        ✦ 愿你星河璀璨，前路漫烂，岁月尽欢 ✦
+      </div>
+    </div>
+
+    <div class="pixel-box">
+      <div class="box-title">【 专属萌宠祝福 MASCOT SQUAD 】</div>
+      <div class="pet-grid">
+        <div class="pet-card" onclick="petSay('皮皮熊：紫惠，祝你每一天都像吃蜜糖一样甜滋滋！ʕ•ᴥ•ʔ')">
+          <div class="pet-avatar">🐻</div>
+          <div class="pet-name">皮皮 bear</div>
+        </div>
+        <div class="pet-card" onclick="petSay('米米兔：蹦蹦跳跳，把所有好运气跟满分都撞进紫惠怀里！ᕱ⑅ᕱ')">
+          <div class="pet-avatar">🐰</div>
+          <div class="pet-name">米米 bunny</div>
+        </div>
+        <div class="pet-card" onclick="petSay('小七鸡：咕咕咕！新的一岁元气拉满，烦恼通通闪开！🐥')">
+          <div class="pet-avatar">🐥</div>
+          <div class="pet-name">小七 chick</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 八音盒模块 -->
+    <div class="pixel-box">
+      <div class="tag-badge">MUSIC BOX</div>
+      
+      <div class="box-title" style="margin-top:5px; display:flex; justify-content:space-between; align-items:center;">
+        <span>🌠 水晶星愿八音盒 (MUSIC BOX)</span>
+      </div>
+
+      <div class="record-wrapper">
+        <div class="record-disk" id="recordDisk"></div>
+        <div class="disk-status" id="diskStatus">八音盒未启动</div>
+      </div>
+
+      <div class="control-panel">
+        <button class="btn-play-toggle" id="btnPlayMusic">▶ 开启原版声乐</button>
+        <div class="vol-group">
+          <button class="vol-btn" data-vol="0.2">弱</button>
+          <button class="vol-btn active" data-vol="0.5">中</button>
+          <button class="vol-btn" data-vol="0.9">强</button>
+        </div>
+      </div>
+
+      <p class="mb-desc">
+        你的专属原声音轨已接入。<br>
+        轻按上方【播放音乐】开启原声，也可敲击下方【彩色音铃】随心演奏！
+      </p>
+
+      <div class="key-interactive-title">
+        <span>🎹</span> 璀璨互动：请敲击下方琴键，定制属于你的晶莹祝福回响！
+      </div>
+
+      <div class="piano-keys">
+        <div class="piano-key" onclick="playCrystalNote(783.99)">G5<span>🔔</span></div>
+        <div class="piano-key" onclick="playCrystalNote(880.00)">A5<span>🔔</span></div>
+        <div class="piano-key" onclick="playCrystalNote(987.77)">B5<span>🔔</span></div>
+        <div class="piano-key" onclick="playCrystalNote(1046.50)">C6<span>🔔</span></div>
+        <div class="piano-key" onclick="playCrystalNote(1174.66)">D6<span>🔔</span></div>
+        <div class="piano-key" onclick="playCrystalNote(1318.51)">E6<span>🔔</span></div>
+        <div class="piano-key pink-key" onclick="playCrystalNote(1567.98)">G6<span>🔔</span></div>
+      </div>
+
+      <div class="playlist-box">
+        <div class="track-tab active" data-index="0">夢田</div>
+        <div class="track-tab" data-index="1">现在那边是几点</div>
+        <div class="track-tab" data-index="2">夢醒時分</div>
+      </div>
+    </div>
+
+    <!-- 生日信件 -->
+    <div class="pixel-box">
+      <div class="tag-badge">HAPPY BIRTHDAY LETTER</div>
+      <div style="font-size: 15px; font-weight: bold; color: #fff; margin-bottom: 14px; border-bottom: 1px dashed #5a4282; padding-bottom: 8px;">
+        TO DEAR 紫惠酱 🌸
+      </div>
+
+      <div id="letterText" style="font-size: 13px; line-height: 1.9; color: #ded4ee; min-height: 140px;">
+        欸嘿嘿又是新的一岁拉，<br>
+        岁月的画笔，又在你的生命里悄然添上一抹缤纷的色彩。<br><br>
+        愿你未来的日子里，所有的付出都会有甜美的收获与回响；愿你前行的每一个转角，都有明媚的阳光和小确幸。<br><br>
+        最后最后，祝你每个sem都能考到自己想要的成绩噢噢，还有还有少一点烦恼，要多笑(*^_^*)。<br><br>
+        <div style="text-align: right; color: var(--accent-pink); font-weight: bold; font-family: var(--font-pixel); font-size: 11px;">
+          FROM: NOT WBB
+        </div>
+      </div>
+    </div>
+
+    <!-- 许愿池 -->
+    <div class="pixel-box" style="text-align: center;">
+      <div class="tag-badge">WISHING WELL</div>
+      <div class="box-title">秘密星心许愿池 (Wishing Well)</div>
+      <p style="font-size: 11px; color:#b7a4d6;">向粉紫像素星河许个愿，烛火吹熄后即会出发 ✨</p>
+
+      <div class="candle-area" id="candleWrapper" onclick="submitWishAndBlow()">
+        <div class="flame" id="flameObj"></div>
+        <div class="wick"></div>
+        <div class="candle-body">💖</div>
+        <span id="candleHint" style="font-size: 10px; color: var(--accent-cyan); margin-top: 6px;">[ 写好愿望后，点击吹熄烛火发送 ]</span>
+      </div>
+
+      <input type="text" id="wishInput" class="pixel-input" placeholder="写下你心中的愿望（会被悄悄打包送达哦）..." style="text-align: center;">
+      
+      <button class="wish-btn" id="btnSendWish" onclick="submitWishAndBlow()">🌠 许下心愿并吹灭蜡烛 🌠</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  let age = 21;
+  const userName = "紫惠";
+
+  // 本地/线上相对音频路径
+  const songs = [
+    {
+      name: "夢田",
+      artist: "齊豫",
+      url: "./mengtian.mp3"
+    },
+    {
+      name: "现在那边是几点",
+      artist: "黄小琥",
+      url: "./xianzainabian.mp3"
+    },
+    {
+      name: "夢醒時分",
+      artist: "陳淑樺",
+      url: "./mengxingshifen.mp3"
+    }
+  ];
+
+  let currentTrack = 0;
+  const audioPlayer = document.getElementById('realAudioPlayer');
+  audioPlayer.volume = 0.5;
+
+  function playCurrentSong() {
+    audioPlayer.src = songs[currentTrack].url;
+    audioPlayer.play().then(() => {
+      updateMusicUI(true);
+    }).catch(err => {
+      console.log("Audio play err: ", err);
+    });
+  }
+
+  function stopCurrentSong() {
+    audioPlayer.pause();
+    updateMusicUI(false);
+  }
+
+  function updateMusicUI(isPlaying) {
+    const playBtn = document.getElementById('btnPlayMusic');
+    const toggleBtn = document.getElementById('musicToggle');
+    const disk = document.getElementById('recordDisk');
+    const statusText = document.getElementById('diskStatus');
+    const curSong = songs[currentTrack];
+
+    if (isPlaying) {
+      playBtn.innerText = "■ 停止原版声乐";
+      playBtn.classList.add('playing');
+      toggleBtn.classList.add('playing');
+      disk.classList.add('spinning');
+      statusText.innerText = `正在播放:《${curSong.name}》- ${curSong.artist}`;
+      statusText.style.color = "var(--accent-yellow)";
+    } else {
+      playBtn.innerText = "▶ 开启原版声乐";
+      playBtn.classList.remove('playing');
+      toggleBtn.classList.remove('playing');
+      disk.classList.remove('spinning');
+      statusText.innerText = "八音盒未启动";
+      statusText.style.color = "#a491c3";
+    }
+  }
+
+  document.getElementById('btnPlayMusic').onclick = () => {
+    if (!audioPlayer.paused) stopCurrentSong();
+    else playCurrentSong();
+  };
+
+  document.getElementById('musicToggle').onclick = () => {
+    if (!audioPlayer.paused) stopCurrentSong();
+    else playCurrentSong();
+  };
+
+  document.querySelectorAll('.vol-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      document.querySelectorAll('.vol-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      audioPlayer.volume = parseFloat(e.target.dataset.vol);
+    };
+  });
+
+  document.querySelectorAll('.track-tab').forEach(tab => {
+    tab.onclick = (e) => {
+      document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      currentTrack = parseInt(e.target.dataset.index);
+
+      if (!audioPlayer.paused) {
+        playCurrentSong();
+      } else {
+        const curSong = songs[currentTrack];
+        document.getElementById('diskStatus').innerText = `已选曲目:《${curSong.name}》`;
+      }
+    };
+  });
+
+  let audioCtx = null;
+  function playCrystalNote(freq) {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 1.2);
+  }
+
+  document.getElementById('btnDec').onclick = () => {
+    if (age > 1) {
+      age--;
+      document.getElementById('valAge').innerText = age;
+    }
+  };
+  document.getElementById('btnInc').onclick = () => {
+    age++;
+    document.getElementById('valAge').innerText = age;
+  };
+
+  document.getElementById('btnLaunch').onclick = () => {
+    document.querySelectorAll('.render-name').forEach(el => el.innerText = userName);
+    document.querySelectorAll('.render-age').forEach(el => el.innerText = age);
+
+    document.getElementById('stageConfig').classList.add('hidden');
+    document.getElementById('stageLetter').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  document.getElementById('envelopeBox').onclick = () => {
+    document.getElementById('stageLetter').classList.add('hidden');
+    document.getElementById('stageMain').classList.remove('hidden');
+    playCurrentSong();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  function petSay(msg) {
+    playCrystalNote(880);
+    document.getElementById('mascotBubble').innerText = msg;
+  }
+
+  const avatarObj = document.getElementById('avatarObj');
+
+  document.getElementById('typeGroup').addEventListener('click', (e) => {
+    if (e.target.dataset.val) {
+      document.querySelectorAll('#typeGroup .opt-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      avatarObj.innerText = e.target.dataset.val;
+      playCrystalNote(659);
+    }
+  });
+
+  document.getElementById('colorGroup').addEventListener('click', (e) => {
+    if (e.target.dataset.color) {
+      document.querySelectorAll('#colorGroup .opt-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      avatarObj.style.filter = `drop-shadow(0 0 10px ${e.target.dataset.color})`;
+      playCrystalNote(783);
+    }
+  });
+
+  document.getElementById('animGroup').addEventListener('click', (e) => {
+    if (e.target.dataset.anim) {
+      document.querySelectorAll('#animGroup .opt-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      avatarObj.className = 'pixel-avatar ' + e.target.dataset.anim;
+      playCrystalNote(523);
+    }
+  });
+
+  let isSendingWish = false;
+  let candleBlown = false;
+
+  async function submitWishAndBlow() {
+    if (candleBlown || isSendingWish) return;
+    
+    const wishText = document.getElementById('wishInput').value.trim();
+    if (!wishText) {
+      alert("请在输入框先写下你的愿望，再吹灭蜡烛哦 ✨");
+      return;
+    }
+
+    isSendingWish = true;
+    document.getElementById('candleHint').innerText = "💫 愿望正在飞向星空...";
+
+    candleBlown = true;
+    document.getElementById('flameObj').classList.add('off');
+    playCrystalNote(1567.98);
+
+    try {
+      await fetch(`https://formspree.io/f/mqkrvkky`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          寿星: userName,
+          年龄等级: `Level ${age}`,
+          紫惠的心愿: wishText,
+          发送时间: new Date().toLocaleString()
+        })
+      });
+    } catch (e) {
+      console.log("Wish sent notification fallback");
+    }
+
+    document.getElementById('candleHint').innerText = "✨ 愿望已成功送达星系 ✨";
+    document.getElementById('candleHint').style.color = "var(--accent-pink)";
+    document.getElementById('wishInput').disabled = true;
+    document.getElementById('btnSendWish').innerText = "🎉 心愿已达成打包发送 🎉";
+    document.getElementById('btnSendWish').style.background = "#5a4282";
+    document.getElementById('btnSendWish').style.color = "#fff";
+    document.getElementById('btnSendWish').disabled = true;
+
+    alert("🎉 蜡烛吹灭！愿望已经悄悄打包送出，愿紫惠新的一岁所有的美好如期而至！🎂✨");
+  }
+</script>
+</body>
+</html>
