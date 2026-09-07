@@ -55,23 +55,24 @@
     cursor: grabbing;
   }
 
-  /* 穿越流星雨专用覆盖层 Canvas */
-  #meteorCanvas {
+  /* ===== 丝滑转场：深海幻影鲸鱼背景 ===== */
+  #warpBackground {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+    background: #020111 url('./whale.jpg') center/cover no-repeat;
     z-index: 999;
-    pointer-events: none;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    pointer-events: none;
+    transition: opacity 1s ease-in-out;
   }
-  #meteorCanvas.active {
+  #warpBackground.active {
     opacity: 1;
   }
 
-  /* 3-2-1 倒计时 HUD */
+  /* 3-2-1 倒计时 HUD (纯 CSS 硬件加速，绝不卡顿) */
   #countdownOverlay {
     position: fixed;
     top: 0;
@@ -85,7 +86,7 @@
     align-items: center;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.4s;
+    transition: opacity 0.5s ease;
   }
   #countdownOverlay.active {
     opacity: 1;
@@ -95,8 +96,14 @@
     font-family: var(--font-pixel);
     font-size: 80px;
     color: #fff;
-    text-shadow: 0 0 20px #70f3ff, 0 0 40px #3877ff, 4px 4px 0 #120924;
-    animation: zoomPulse 0.9s infinite ease-out;
+    text-shadow: 0 0 20px #70f3ff, 0 0 40px #3877ff, 4px 4px 0 rgba(0,0,0,0.8);
+    transform: scale(0.5);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .countdown-num.pop {
+    transform: scale(1.2);
+    opacity: 1;
   }
 
   .countdown-tip {
@@ -106,12 +113,13 @@
     letter-spacing: 3px;
     margin-top: 18px;
     text-shadow: 0 0 10px #3877ff;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
   }
-
-  @keyframes zoomPulse {
-    0% { transform: scale(0.6); opacity: 0; }
-    50% { transform: scale(1.15); opacity: 1; }
-    100% { transform: scale(1.3); opacity: 0; }
+  .countdown-tip.show {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .screen-container {
@@ -662,13 +670,13 @@
 <!-- 3D 蛋糕与土星全屏 Canvas 背景 -->
 <canvas id="bgCanvas"></canvas>
 
-<!-- 穿越流星雨全屏特效 Canvas -->
-<canvas id="meteorCanvas"></canvas>
+<!-- 极度流畅的：深海鲸鱼梦幻转场背景层 -->
+<div id="warpBackground"></div>
 
-<!-- 3-2-1 倒计时特效覆盖层 -->
+<!-- 3-2-1 倒计时特效覆盖层 (纯CSS 无卡顿) -->
 <div id="countdownOverlay">
   <div class="countdown-num" id="countdownNum">3</div>
-  <div class="countdown-tip" id="countdownTip">✨ WARPING THROUGH METEOR SHOWER ✨</div>
+  <div class="countdown-tip" id="countdownTip">✨ DIVING INTO THE STAR OCEAN ✨</div>
 </div>
 
 <audio id="realAudioPlayer" preload="auto" loop></audio>
@@ -908,8 +916,6 @@
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
-    mCanvas.width = width;
-    mCanvas.height = height;
   });
 
   const stars = [];
@@ -1143,110 +1149,62 @@
   }
   render();
 
-  // ==================== 2. 穿越流星雨引擎 (Meteor Warp Engine) ====================
-  const mCanvas = document.getElementById('meteorCanvas');
-  const mCtx = mCanvas.getContext('2d');
-  mCanvas.width = width;
-  mCanvas.height = height;
-
-  let isWarping = false;
-  let warpSpeed = 8;
-  const meteors = [];
-
-  for (let i = 0; i < 350; i++) {
-    meteors.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      len: Math.random() * 80 + 30,
-      speed: Math.random() * 12 + 10,
-      width: Math.random() * 2.2 + 1,
-      color: Math.random() > 0.4 ? '#38bdf8' : (Math.random() > 0.5 ? '#818cf8' : '#e0e7ff')
-    });
-  }
-
-  function renderMeteors() {
-    if (!isWarping) return;
-    mCtx.fillStyle = 'rgba(6, 2, 20, 0.28)';
-    mCtx.fillRect(0, 0, width, height);
-
-    for (let m of meteors) {
-      m.y += m.speed * (warpSpeed / 10);
-      if (m.y > height + 100) {
-        m.y = -100;
-        m.x = Math.random() * width;
-      }
-
-      const grad = mCtx.createLinearGradient(m.x, m.y - m.len, m.x, m.y);
-      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
-      grad.addColorStop(0.7, m.color);
-      grad.addColorStop(1, '#ffffff');
-
-      mCtx.strokeStyle = grad;
-      mCtx.lineWidth = m.width;
-      mCtx.lineCap = 'round';
-      mCtx.beginPath();
-      mCtx.moveTo(m.x, m.y - m.len * (warpSpeed / 12));
-      mCtx.lineTo(m.x, m.y);
-      mCtx.stroke();
-
-      // 头部光晕
-      mCtx.fillStyle = '#ffffff';
-      mCtx.shadowBlur = 10;
-      mCtx.shadowColor = '#38bdf8';
-      mCtx.beginPath();
-      mCtx.arc(m.x, m.y, m.width * 1.2, 0, Math.PI * 2);
-      mCtx.fill();
-    }
-    requestAnimationFrame(renderMeteors);
-  }
-
-  // 3-2-1 倒计时并触发流星雨穿越
-  function triggerWarpTransition() {
-    isWarping = true;
-    mCanvas.classList.add('active');
-    renderMeteors();
-
-    const overlay = document.getElementById('countdownOverlay');
+  // ==================== 2. 极致丝滑：纯 CSS 幻影鲸鱼转场引擎 ====================
+  function triggerWhaleTransition() {
+    const bgOverlay = document.getElementById('warpBackground');
+    const cdOverlay = document.getElementById('countdownOverlay');
     const numEl = document.getElementById('countdownNum');
     const tipEl = document.getElementById('countdownTip');
 
-    overlay.classList.add('active');
+    // 唤出深海鲸鱼背景和数字遮罩层
+    bgOverlay.classList.add('active');
+    cdOverlay.classList.add('active');
 
-    let count = 3;
-    numEl.innerText = count;
-    warpSpeed = 15;
-    playCrystalNote(523.25);
-
-    const timer = setInterval(() => {
-      count--;
-      if (count === 2) {
-        numEl.innerText = "2";
-        warpSpeed = 26;
-        playCrystalNote(659.25);
-      } else if (count === 1) {
-        numEl.innerText = "1";
-        warpSpeed = 42;
-        tipEl.innerText = "🚀 SPEED REACHING MAXIMUM! 🚀";
-        playCrystalNote(783.99);
-      } else if (count === 0) {
-        numEl.innerText = "START!";
-        warpSpeed = 60;
-        playCrystalNote(1046.50);
-      } else {
-        clearInterval(timer);
-        // 结束穿越，进入主舞台
-        setTimeout(() => {
-          overlay.classList.remove('active');
-          mCanvas.classList.remove('active');
-          isWarping = false;
-
-          document.getElementById('stageLetter').classList.add('hidden');
-          document.getElementById('stageMain').classList.remove('hidden');
-          if (audioPlayer.paused) playCurrentSong();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 600);
+    // 辅助函数：触发数字弹出动画
+    function popNumber(num, text = null) {
+      numEl.classList.remove('pop');
+      void numEl.offsetWidth; // 触发重绘，重置CSS动画
+      numEl.innerText = num;
+      numEl.classList.add('pop');
+      if (text) {
+        tipEl.innerText = text;
+        tipEl.classList.add('show');
       }
-    }, 1000);
+    }
+
+    // 3 - 2 - 1 丝滑调度
+    setTimeout(() => {
+      popNumber(3);
+      playCrystalNote(523.25);
+    }, 100);
+
+    setTimeout(() => {
+      popNumber(2);
+      playCrystalNote(659.25);
+    }, 1100);
+
+    setTimeout(() => {
+      popNumber(1);
+      playCrystalNote(783.99);
+    }, 2100);
+
+    setTimeout(() => {
+      popNumber("START!", "✨ DIVING INTO THE STAR OCEAN ✨");
+      playCrystalNote(1046.50);
+    }, 3100);
+
+    // 4.5秒后自动淡出转场，进入主舞台
+    setTimeout(() => {
+      bgOverlay.classList.remove('active');
+      cdOverlay.classList.remove('active');
+      tipEl.classList.remove('show');
+      
+      document.getElementById('stageLetter').classList.add('hidden');
+      document.getElementById('stageMain').classList.remove('hidden');
+      
+      if (audioPlayer.paused) playCurrentSong();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 4500);
   }
 
   // ==================== 3. 音乐与贺卡交互逻辑 ====================
@@ -1418,9 +1376,9 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // 点击信封启动 3-2-1 穿越流星雨转场
+  // 点击信封启动：深海幻影鲸鱼转场
   document.getElementById('envelopeBox').onclick = () => {
-    triggerWarpTransition();
+    triggerWhaleTransition();
   };
 
   function petSay(msg) {
