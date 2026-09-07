@@ -51,28 +51,25 @@
     z-index: 0;
     cursor: grab;
   }
-  #bgCanvas:active {
-    cursor: grabbing;
-  }
+  #bgCanvas:active { cursor: grabbing; }
 
-  /* ===== 丝滑转场：深海幻影鲸鱼背景 ===== */
+  /* ===== 极度丝滑转场：高级深空蓝渐变背景 ===== */
   #warpBackground {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: #020111 url('./whale.jpg') center/cover no-repeat;
+    /* 默认展示极简高级深空蓝，如果你传了 whale.gif 会自动显示动图 */
+    background: radial-gradient(circle at center, #0e1c36 0%, #030614 100%) url('./whale.gif') center/cover no-repeat;
     z-index: 999;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
   }
-  #warpBackground.active {
-    opacity: 1;
-  }
+  #warpBackground.active { opacity: 1; }
 
-  /* 3-2-1 倒计时 HUD (纯 CSS 硬件加速，绝不卡顿) */
+  /* ===== 完美复刻：极简 3-2-1 蓝色荧光倒计时 ===== */
   #countdownOverlay {
     position: fixed;
     top: 0;
@@ -81,602 +78,126 @@
     height: 100vh;
     z-index: 1000;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.4s ease;
   }
-  #countdownOverlay.active {
-    opacity: 1;
-  }
+  #countdownOverlay.active { opacity: 1; }
 
   .countdown-num {
     font-family: var(--font-pixel);
-    font-size: 80px;
-    color: #fff;
-    text-shadow: 0 0 20px #70f3ff, 0 0 40px #3877ff, 4px 4px 0 rgba(0,0,0,0.8);
+    font-size: 110px;
+    color: #ffffff;
+    /* 极致蓝色荧光发光特效，完美复刻截图的高级质感 */
+    text-shadow: 0 0 15px #70f3ff, 0 0 30px #38bdf8, 0 0 60px #2563eb;
     transform: scale(0.5);
     opacity: 0;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* 开启硬件加速，彻底解决卡顿问题 */
+    will-change: transform, opacity;
   }
+  
+  /* 触发弹出的纯 CSS 丝滑曲线动画 */
   .countdown-num.pop {
-    transform: scale(1.2);
-    opacity: 1;
+    animation: smoothPop 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
   }
 
-  .countdown-tip {
-    font-family: var(--font-pixel);
-    font-size: 13px;
-    color: #70f3ff;
-    letter-spacing: 3px;
-    margin-top: 18px;
-    text-shadow: 0 0 10px #3877ff;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.5s ease;
-  }
-  .countdown-tip.show {
-    opacity: 1;
-    transform: translateY(0);
+  @keyframes smoothPop {
+    0% { transform: scale(0.6); opacity: 0; }
+    20% { transform: scale(1.05); opacity: 1; }
+    80% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1.3); opacity: 0; }
   }
 
-  .screen-container {
-    width: 100%;
-    max-width: 440px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 10;
-  }
-
-  .pixel-box {
-    width: 100%;
-    background: var(--card-bg);
-    border: 3px solid #fff;
-    box-shadow: 0 0 0 3px rgba(7, 3, 18, 0.9), 0 0 25px rgba(255, 117, 151, 0.35);
-    border-radius: 4px;
-    padding: 20px 16px;
-    margin-bottom: 24px;
-    position: relative;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-
-  .pixel-box-inner {
-    background: var(--card-inner);
-    border: 2px solid var(--border-light);
-    border-radius: 4px;
-    padding: 14px;
-    margin-top: 14px;
-  }
-
-  .marquee-oval {
-    width: 290px;
-    height: 110px;
-    border: 3px dashed var(--accent-yellow);
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 10px auto 25px;
-    box-shadow: 0 0 15px rgba(255, 209, 92, 0.4), inset 0 0 15px rgba(255, 209, 92, 0.2);
-    position: relative;
-    background: rgba(28, 16, 51, 0.7);
-  }
-
-  .marquee-oval h1 {
-    font-family: var(--font-pixel);
-    font-size: 16px;
-    color: #fff;
-    text-shadow: 2px 2px var(--accent-pink), -1px -1px var(--accent-cyan);
-    letter-spacing: 2px;
-    margin-bottom: 6px;
-  }
-
-  .marquee-oval p {
-    font-size: 11px;
-    color: var(--accent-cyan);
-    letter-spacing: 1px;
-  }
-
-  .tag-badge {
-    position: absolute;
-    top: -14px;
-    left: 20px;
-    background: var(--accent-pink);
-    color: #fff;
-    font-family: var(--font-pixel);
-    font-size: 10px;
-    padding: 4px 10px;
-    border: 2px solid #fff;
-    border-radius: 3px;
-    box-shadow: 2px 2px 0 #000;
-  }
-
-  .box-title {
-    text-align: center;
-    color: var(--accent-yellow);
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
-  }
-
-  .form-group {
-    margin-bottom: 14px;
-  }
-
-  .form-group label {
-    display: block;
-    font-size: 12px;
-    color: #c9bade;
-    margin-bottom: 6px;
-  }
-
-  .pixel-input {
-    width: 100%;
-    background: rgba(13, 6, 26, 0.9);
-    border: 2px solid #5a4282;
-    color: #fff;
-    padding: 10px 12px;
-    font-size: 14px;
-    outline: none;
-    border-radius: 4px;
-    font-family: inherit;
-    user-select: text;
-    -webkit-user-select: text;
-  }
-  .pixel-input:focus {
-    border-color: var(--accent-pink);
-  }
-
-  .counter-box {
-    display: flex;
-    align-items: center;
-    background: rgba(13, 6, 26, 0.9);
-    border: 2px solid #5a4282;
-    border-radius: 4px;
-    height: 42px;
-  }
-
-  .counter-btn {
-    width: 44px;
-    height: 100%;
-    background: #2b184a;
-    border: none;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    font-family: var(--font-pixel);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  /* 通用 UI 样式 */
+  .screen-container { width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 10; }
+  .pixel-box { width: 100%; background: var(--card-bg); border: 3px solid #fff; box-shadow: 0 0 0 3px rgba(7, 3, 18, 0.9), 0 0 25px rgba(255, 117, 151, 0.35); border-radius: 4px; padding: 20px 16px; margin-bottom: 24px; position: relative; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .pixel-box-inner { background: var(--card-inner); border: 2px solid var(--border-light); border-radius: 4px; padding: 14px; margin-top: 14px; }
+  .marquee-oval { width: 290px; height: 110px; border: 3px dashed var(--accent-yellow); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px auto 25px; box-shadow: 0 0 15px rgba(255, 209, 92, 0.4), inset 0 0 15px rgba(255, 209, 92, 0.2); position: relative; background: rgba(28, 16, 51, 0.7); }
+  .marquee-oval h1 { font-family: var(--font-pixel); font-size: 16px; color: #fff; text-shadow: 2px 2px var(--accent-pink), -1px -1px var(--accent-cyan); letter-spacing: 2px; margin-bottom: 6px; }
+  .marquee-oval p { font-size: 11px; color: var(--accent-cyan); letter-spacing: 1px; }
+  .tag-badge { position: absolute; top: -14px; left: 20px; background: var(--accent-pink); color: #fff; font-family: var(--font-pixel); font-size: 10px; padding: 4px 10px; border: 2px solid #fff; border-radius: 3px; box-shadow: 2px 2px 0 #000; }
+  .box-title { text-align: center; color: var(--accent-yellow); font-size: 13px; font-weight: bold; margin-bottom: 12px; letter-spacing: 1px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; color: #c9bade; margin-bottom: 6px; }
+  .pixel-input { width: 100%; background: rgba(13, 6, 26, 0.9); border: 2px solid #5a4282; color: #fff; padding: 10px 12px; font-size: 14px; outline: none; border-radius: 4px; font-family: inherit; user-select: text; -webkit-user-select: text; }
+  .pixel-input:focus { border-color: var(--accent-pink); }
+  .counter-box { display: flex; align-items: center; background: rgba(13, 6, 26, 0.9); border: 2px solid #5a4282; border-radius: 4px; height: 42px; }
+  .counter-btn { width: 44px; height: 100%; background: #2b184a; border: none; color: #fff; font-size: 18px; cursor: pointer; font-family: var(--font-pixel); display: flex; justify-content: center; align-items: center; }
   .counter-btn:active { background: var(--accent-pink); }
-
-  .counter-val {
-    flex: 1;
-    text-align: center;
-    font-family: var(--font-pixel);
-    font-size: 12px;
-    color: #fff;
-  }
-
-  .btn-start {
-    width: 100%;
-    background: #ff85a1;
-    border: 3px solid #fff;
-    color: #120924;
-    padding: 14px;
-    font-family: var(--font-pixel);
-    font-size: 12px;
-    cursor: pointer;
-    margin-top: 10px;
-    box-shadow: 0 4px 0 #b3395b;
-    border-radius: 4px;
-    transition: transform 0.05s;
-    font-weight: bold;
-    text-align: center;
-  }
-  .btn-start:active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 #b3395b;
-  }
-
-  .music-toggle {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    width: 38px;
-    height: 38px;
-    background: rgba(196, 144, 228, 0.35);
-    border: 2px solid var(--accent-purple);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    z-index: 100;
-    backdrop-filter: blur(6px);
-  }
-  .music-toggle.playing {
-    animation: pulse 1.5s infinite;
-    background: var(--accent-purple);
-    color: #120924;
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(196, 144, 228, 0.7); }
-    50% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(196, 144, 228, 0); }
-  }
-
+  .counter-val { flex: 1; text-align: center; font-family: var(--font-pixel); font-size: 12px; color: #fff; }
+  .btn-start { width: 100%; background: #ff85a1; border: 3px solid #fff; color: #120924; padding: 14px; font-family: var(--font-pixel); font-size: 12px; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 0 #b3395b; border-radius: 4px; transition: transform 0.05s; font-weight: bold; text-align: center; }
+  .btn-start:active { transform: translateY(3px); box-shadow: 0 1px 0 #b3395b; }
+  .music-toggle { position: fixed; top: 15px; right: 15px; width: 38px; height: 38px; background: rgba(196, 144, 228, 0.35); border: 2px solid var(--accent-purple); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; backdrop-filter: blur(6px); }
+  .music-toggle.playing { animation: pulse 1.5s infinite; background: var(--accent-purple); color: #120924; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(196, 144, 228, 0.7); } 50% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(196, 144, 228, 0); } }
   .hidden { display: none !important; }
-
-  .letter-stage {
-    text-align: center;
-    width: 100%;
-  }
-
-  .envelope-wrapper {
-    width: 100%;
-    height: 190px;
-    background: #341e5b;
-    border: 3px solid #fff;
-    border-radius: 6px;
-    margin: 25px 0;
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 20px rgba(196, 144, 228, 0.3);
-    overflow: hidden;
-  }
-
-  .envelope-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    border-top: 90px solid #482b7c;
-    border-left: 175px solid transparent;
-    border-right: 175px solid transparent;
-  }
-
-  .envelope-stamp {
-    width: 48px;
-    height: 48px;
-    background: var(--accent-yellow);
-    border: 2px dashed #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    font-size: 22px;
-  }
-
-  .dialog-bubble {
-    background: rgba(43, 24, 74, 0.95);
-    border: 2px solid #5a4282;
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
-    font-size: 12px;
-    color: #fff;
-    margin-bottom: 15px;
-    line-height: 1.5;
-  }
-
-  .mascot-display {
-    width: 140px;
-    height: 140px;
-    margin: 0 auto 10px;
-    border: 2px dashed rgba(255, 255, 255, 0.25);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-
-  .pixel-avatar {
-    width: 70px;
-    height: 70px;
-    position: relative;
-    transition: transform 0.2s;
-  }
-
+  .letter-stage { text-align: center; width: 100%; }
+  .envelope-wrapper { width: 100%; height: 190px; background: #341e5b; border: 3px solid #fff; border-radius: 6px; margin: 25px 0; position: relative; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(196, 144, 228, 0.3); overflow: hidden; }
+  .envelope-wrapper::before { content: ''; position: absolute; top: 0; left: 0; right: 0; border-top: 90px solid #482b7c; border-left: 175px solid transparent; border-right: 175px solid transparent; }
+  .envelope-stamp { width: 48px; height: 48px; background: var(--accent-yellow); border: 2px dashed #fff; display: flex; justify-content: center; align-items: center; position: relative; z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,0.4); font-size: 22px; }
+  .dialog-bubble { background: rgba(43, 24, 74, 0.95); border: 2px solid #5a4282; border-radius: 8px; padding: 10px; text-align: center; font-size: 12px; color: #fff; margin-bottom: 15px; line-height: 1.5; }
+  .mascot-display { width: 140px; height: 140px; margin: 0 auto 10px; border: 2px dashed rgba(255, 255, 255, 0.25); border-radius: 50%; display: flex; justify-content: center; align-items: center; position: relative; }
+  .pixel-avatar { width: 70px; height: 70px; position: relative; transition: transform 0.2s; }
   .anim-jump { animation: jumpAnim 0.6s infinite alternate ease-in-out; }
   .anim-breathe { animation: breatheAnim 1.8s infinite ease-in-out; }
   .anim-spin { animation: spinAnim 1.2s infinite linear; }
-
   @keyframes jumpAnim { 0% { transform: translateY(0); } 100% { transform: translateY(-16px); } }
   @keyframes breatheAnim { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
   @keyframes spinAnim { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-  .custom-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 11px;
-  }
+  .custom-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 11px; }
   .custom-row span { color: #b7a4d6; }
-  .option-btns {
-    display: flex;
-    gap: 6px;
-  }
-  .opt-btn {
-    background: #2b184a;
-    border: 1px solid #5a4282;
-    color: #fff;
-    padding: 3px 8px;
-    border-radius: 3px;
-    font-size: 11px;
-    cursor: pointer;
-  }
-  .opt-btn.active {
-    background: var(--accent-pink);
-    border-color: #fff;
-    color: #120924;
-    font-weight: bold;
-  }
-
-  .pet-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 10px;
-  }
-  .pet-card {
-    background: rgba(17, 7, 36, 0.9);
-    border: 1px solid #443366;
-    padding: 10px 4px;
-    text-align: center;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+  .option-btns { display: flex; gap: 6px; }
+  .opt-btn { background: #2b184a; border: 1px solid #5a4282; color: #fff; padding: 3px 8px; border-radius: 3px; font-size: 11px; cursor: pointer; }
+  .opt-btn.active { background: var(--accent-pink); border-color: #fff; color: #120924; font-weight: bold; }
+  .pet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+  .pet-card { background: rgba(17, 7, 36, 0.9); border: 1px solid #443366; padding: 10px 4px; text-align: center; border-radius: 4px; cursor: pointer; }
   .pet-card:hover { border-color: var(--accent-pink); }
   .pet-avatar { font-size: 26px; margin-bottom: 4px; }
   .pet-name { font-size: 10px; color: #b7a4d6; font-family: var(--font-pixel); }
-
-  .record-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 12px 0 16px;
-  }
-
-  .record-disk {
-    width: 86px;
-    height: 86px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #ffd15c 14%, #c92f6d 15%, #c92f6d 38%, #ffd15c 40%, #ffd15c 42%, #221535 43%);
-    border: 3px solid #ffd15c;
-    box-shadow: 0 0 16px rgba(255, 209, 92, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.3s;
-  }
-
-  .record-disk.spinning {
-    animation: diskSpin 2.5s infinite linear;
-    box-shadow: 0 0 22px rgba(255, 117, 151, 0.6);
-  }
-
-  @keyframes diskSpin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  .disk-status {
-    margin-top: 8px;
-    font-size: 11px;
-    color: #a491c3;
-  }
-
-  .control-panel {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-
-  .btn-play-toggle {
-    background: #2b184a;
-    border: 2px solid #fff;
-    color: #fff;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 6px 14px;
-    border-radius: 3px;
-    cursor: pointer;
-    box-shadow: 0 2px 0 #000;
-  }
-  .btn-play-toggle.playing {
-    background: var(--accent-pink);
-    color: #120924;
-  }
-
-  .vol-group {
-    display: flex;
-    background: #0f071d;
-    border: 1px solid #5a4282;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .vol-btn {
-    background: transparent;
-    border: none;
-    color: #a491c3;
-    font-size: 11px;
-    padding: 5px 8px;
-    cursor: pointer;
-  }
-  .vol-btn.active {
-    background: var(--accent-pink);
-    color: #120924;
-    font-weight: bold;
-  }
-
-  .mb-desc {
-    font-size: 11px;
-    color: #b7a4d6;
-    text-align: center;
-    line-height: 1.6;
-    margin: 10px 0;
-  }
-
-  .key-interactive-title {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--accent-yellow);
-    font-size: 11px;
-    margin: 14px 0 8px;
-    line-height: 1.4;
-  }
-
-  .piano-keys {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    margin-bottom: 16px;
-  }
-
-  .piano-key {
-    background: #5b4280;
-    border: 2px solid #fff;
-    border-radius: 3px;
-    padding: 10px 0 6px;
-    text-align: center;
-    cursor: pointer;
-    color: #fff;
-    font-family: var(--font-pixel);
-    font-size: 9px;
-    box-shadow: 0 3px 0 #200f38;
-    transition: transform 0.05s;
-  }
-  .piano-key:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0 #200f38;
-    background: var(--accent-pink);
-  }
-  .piano-key.pink-key {
-    background: #ff85a1;
-    color: #120924;
-    font-weight: bold;
-  }
-  .piano-key span {
-    display: block;
-    font-size: 11px;
-    margin-top: 3px;
-  }
-
-  .playlist-box {
-    background: rgba(17, 7, 36, 0.9);
-    border: 2px solid #5a4282;
-    border-radius: 4px;
-    padding: 6px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-  }
-
-  .track-tab {
-    background: transparent;
-    border: 2px solid transparent;
-    color: #a491c3;
-    padding: 8px 2px;
-    font-size: 12px;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 3px;
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .track-tab.active {
-    background: #ff85a1;
-    color: #120924;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 0 #000;
-  }
-
-  .candle-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 15px 0;
-    cursor: pointer;
-  }
-  .flame {
-    width: 14px;
-    height: 20px;
-    background: #ffd15c;
-    border-radius: 50% 50% 35% 35%;
-    box-shadow: 0 0 12px #ff7597, 0 0 20px #ffd15c;
-    animation: flicker 0.2s infinite alternate;
-  }
+  .record-wrapper { display: flex; flex-direction: column; align-items: center; margin: 12px 0 16px; }
+  .record-disk { width: 86px; height: 86px; border-radius: 50%; background: radial-gradient(circle, #ffd15c 14%, #c92f6d 15%, #c92f6d 38%, #ffd15c 40%, #ffd15c 42%, #221535 43%); border: 3px solid #ffd15c; box-shadow: 0 0 16px rgba(255, 209, 92, 0.3); display: flex; justify-content: center; align-items: center; transition: transform 0.3s; }
+  .record-disk.spinning { animation: diskSpin 2.5s infinite linear; box-shadow: 0 0 22px rgba(255, 117, 151, 0.6); }
+  @keyframes diskSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .disk-status { margin-top: 8px; font-size: 11px; color: #a491c3; }
+  .control-panel { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .btn-play-toggle { background: #2b184a; border: 2px solid #fff; color: #fff; font-size: 12px; font-weight: bold; padding: 6px 14px; border-radius: 3px; cursor: pointer; box-shadow: 0 2px 0 #000; }
+  .btn-play-toggle.playing { background: var(--accent-pink); color: #120924; }
+  .vol-group { display: flex; background: #0f071d; border: 1px solid #5a4282; border-radius: 3px; overflow: hidden; }
+  .vol-btn { background: transparent; border: none; color: #a491c3; font-size: 11px; padding: 5px 8px; cursor: pointer; }
+  .vol-btn.active { background: var(--accent-pink); color: #120924; font-weight: bold; }
+  .mb-desc { font-size: 11px; color: #b7a4d6; text-align: center; line-height: 1.6; margin: 10px 0; }
+  .key-interactive-title { display: flex; align-items: center; gap: 6px; color: var(--accent-yellow); font-size: 11px; margin: 14px 0 8px; line-height: 1.4; }
+  .piano-keys { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 16px; }
+  .piano-key { background: #5b4280; border: 2px solid #fff; border-radius: 3px; padding: 10px 0 6px; text-align: center; cursor: pointer; color: #fff; font-family: var(--font-pixel); font-size: 9px; box-shadow: 0 3px 0 #200f38; transition: transform 0.05s; }
+  .piano-key:active { transform: translateY(2px); box-shadow: 0 1px 0 #200f38; background: var(--accent-pink); }
+  .piano-key.pink-key { background: #ff85a1; color: #120924; font-weight: bold; }
+  .piano-key span { display: block; font-size: 11px; margin-top: 3px; }
+  .playlist-box { background: rgba(17, 7, 36, 0.9); border: 2px solid #5a4282; border-radius: 4px; padding: 6px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .track-tab { background: transparent; border: 2px solid transparent; color: #a491c3; padding: 8px 2px; font-size: 12px; font-weight: bold; text-align: center; border-radius: 3px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-tab.active { background: #ff85a1; color: #120924; border: 2px solid #fff; box-shadow: 0 2px 0 #000; }
+  .candle-area { display: flex; flex-direction: column; align-items: center; margin: 15px 0; cursor: pointer; }
+  .flame { width: 14px; height: 20px; background: #ffd15c; border-radius: 50% 50% 35% 35%; box-shadow: 0 0 12px #ff7597, 0 0 20px #ffd15c; animation: flicker 0.2s infinite alternate; }
   .flame.off { display: none; }
-  @keyframes flicker {
-    0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
-    100% { transform: scale(1.1) rotate(2deg); opacity: 1; }
-  }
+  @keyframes flicker { 0% { transform: scale(1) rotate(-2deg); opacity: 0.9; } 100% { transform: scale(1.1) rotate(2deg); opacity: 1; } }
   .wick { width: 3px; height: 6px; background: #fff; }
-  .candle-body {
-    width: 28px;
-    height: 38px;
-    background: #ff85a1;
-    border: 2px solid #fff;
-    border-radius: 3px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 10px;
-  }
-
-  .wish-btn {
-    width: 100%;
-    background: #70f3ff;
-    border: 2px solid #fff;
-    color: #120924;
-    padding: 10px;
-    font-family: var(--font-pixel);
-    font-size: 11px;
-    cursor: pointer;
-    margin-top: 10px;
-    box-shadow: 0 3px 0 #3aa1ad;
-    border-radius: 4px;
-    font-weight: bold;
-  }
-  .wish-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0 #3aa1ad;
-  }
+  .candle-body { width: 28px; height: 38px; background: #ff85a1; border: 2px solid #fff; border-radius: 3px; display: flex; justify-content: center; align-items: center; font-size: 10px; }
+  .wish-btn { width: 100%; background: #70f3ff; border: 2px solid #fff; color: #120924; padding: 10px; font-family: var(--font-pixel); font-size: 11px; cursor: pointer; margin-top: 10px; box-shadow: 0 3px 0 #3aa1ad; border-radius: 4px; font-weight: bold; }
+  .wish-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #3aa1ad; }
 </style>
 </head>
 <body>
 
-<!-- 3D 蛋糕与土星全屏 Canvas 背景 -->
+<!-- 主舞台 3D 背景层 -->
 <canvas id="bgCanvas"></canvas>
 
-<!-- 极度流畅的：深海鲸鱼梦幻转场背景层 -->
+<!-- 鲸鱼转场贴图覆盖层 (自带深空高级蓝渐变托底) -->
 <div id="warpBackground"></div>
 
-<!-- 3-2-1 倒计时特效覆盖层 (纯CSS 无卡顿) -->
+<!-- 完美复刻的丝滑极简 3-2-1 蓝色倒数层 -->
 <div id="countdownOverlay">
   <div class="countdown-num" id="countdownNum">3</div>
-  <div class="countdown-tip" id="countdownTip">✨ DIVING INTO THE STAR OCEAN ✨</div>
 </div>
 
 <audio id="realAudioPlayer" preload="auto" loop></audio>
@@ -920,15 +441,9 @@
 
   const stars = [];
   for (let i = 0; i < 150; i++) {
-    stars.push({
-      x: (Math.random() - 0.5) * 1800,
-      y: (Math.random() - 0.5) * 1800,
-      z: Math.random() * 1000,
-      size: Math.random() * 1.5 + 0.4
-    });
+    stars.push({ x: (Math.random() - 0.5) * 1800, y: (Math.random() - 0.5) * 1800, z: Math.random() * 1000, size: Math.random() * 1.5 + 0.4 });
   }
 
-  // 3D 蛋糕粒子
   const cakeParticles = [];
   function createTier(radius, heightStart, heightEnd, numParticles) {
     for (let i = 0; i < numParticles; i++) {
@@ -937,516 +452,190 @@
       const isRim = Math.random() > 0.45;
       const curR = isRim ? (radius - Math.random() * 6) : r;
       const y = isRim ? (heightStart + Math.random() * (heightEnd - heightStart)) : (Math.random() > 0.5 ? heightStart : heightEnd);
-      cakeParticles.push({
-        x: Math.cos(angle) * curR,
-        y: y,
-        z: Math.sin(angle) * curR,
-        baseColor: Math.random() > 0.3 ? '#8be9fd' : '#ffffff',
-        size: Math.random() * 1.4 + 0.7,
-        type: 'cake'
-      });
+      cakeParticles.push({ x: Math.cos(angle) * curR, y: y, z: Math.sin(angle) * curR, baseColor: Math.random() > 0.3 ? '#8be9fd' : '#ffffff', size: Math.random() * 1.4 + 0.7, type: 'cake' });
     }
   }
-  createTier(130, 45, 95, 1200);
-  createTier(95, -5, 45, 900);
-  createTier(60, -55, -5, 700);
+  createTier(130, 45, 95, 1200); createTier(95, -5, 45, 900); createTier(60, -55, -5, 700);
 
-  const candlePositions = [
-    {x: -24, y: -75, z: -6},
-    {x: 0,   y: -80, z: 10},
-    {x: 24,  y: -75, z: -6}
-  ];
+  const candlePositions = [{x: -24, y: -75, z: -6}, {x: 0, y: -80, z: 10}, {x: 24, y: -75, z: -6}];
   candlePositions.forEach(c => {
-    for (let i = 0; i < 30; i++) {
-      cakeParticles.push({
-        x: c.x + (Math.random() - 0.5) * 4,
-        y: c.y + Math.random() * 20,
-        z: c.z + (Math.random() - 0.5) * 4,
-        baseColor: '#ffffff',
-        size: 1.2,
-        type: 'wick'
-      });
-    }
-    for (let i = 0; i < 70; i++) {
-      cakeParticles.push({
-        ox: c.x,
-        oy: c.y - 12,
-        oz: c.z,
-        x: c.x,
-        y: c.y - 12,
-        z: c.z,
-        baseColor: Math.random() > 0.4 ? '#ffb86c' : '#ff5555',
-        size: Math.random() * 2.0 + 1.0,
-        type: 'flame',
-        flickerSeed: Math.random() * 10
-      });
-    }
+    for (let i = 0; i < 30; i++) cakeParticles.push({x: c.x + (Math.random() - 0.5) * 4, y: c.y + Math.random() * 20, z: c.z + (Math.random() - 0.5) * 4, baseColor: '#ffffff', size: 1.2, type: 'wick'});
+    for (let i = 0; i < 70; i++) cakeParticles.push({ox: c.x, oy: c.y - 12, oz: c.z, x: c.x, y: c.y - 12, z: c.z, baseColor: Math.random() > 0.4 ? '#ffb86c' : '#ff5555', size: Math.random() * 2.0 + 1.0, type: 'flame', flickerSeed: Math.random() * 10});
   });
 
-  // 3D 紫色土星粒子
   const planetParticles = [];
   const planetRadius = 90;
   for (let i = 0; i < 1400; i++) {
-    const u = Math.random();
-    const v = Math.random();
-    const theta = u * 2.0 * Math.PI;
-    const phi = Math.acos(2.0 * v - 1.0);
+    const u = Math.random(); const v = Math.random();
+    const theta = u * 2.0 * Math.PI; const phi = Math.acos(2.0 * v - 1.0);
     const r = planetRadius + (Math.random() - 0.5) * 4;
-    planetParticles.push({
-      x: r * Math.sin(phi) * Math.cos(theta),
-      y: r * Math.sin(phi) * Math.sin(theta),
-      z: r * Math.cos(phi),
-      baseColor: Math.random() > 0.4 ? '#c490e4' : (Math.random() > 0.5 ? '#ff7597' : '#70f3ff'),
-      size: Math.random() * 1.5 + 0.8,
-      type: 'sphere'
-    });
+    planetParticles.push({x: r * Math.sin(phi) * Math.cos(theta), y: r * Math.sin(phi) * Math.sin(theta), z: r * Math.cos(phi), baseColor: Math.random() > 0.4 ? '#c490e4' : (Math.random() > 0.5 ? '#ff7597' : '#70f3ff'), size: Math.random() * 1.5 + 0.8, type: 'sphere'});
   }
 
-  const ringInner = 120;
-  const ringOuter = 210;
+  const ringInner = 120; const ringOuter = 210;
   for (let i = 0; i < 2200; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const dist = ringInner + Math.random() * (ringOuter - ringInner);
-    let rx = Math.cos(angle) * dist;
-    let ry = (Math.random() - 0.5) * 5;
-    let rz = Math.sin(angle) * dist;
-
+    const angle = Math.random() * Math.PI * 2; const dist = ringInner + Math.random() * (ringOuter - ringInner);
+    let rx = Math.cos(angle) * dist; let ry = (Math.random() - 0.5) * 5; let rz = Math.sin(angle) * dist;
     const tilt = 0.45;
-    let yTilted = ry * Math.cos(tilt) - rz * Math.sin(tilt);
-    let zTilted = rz * Math.cos(tilt) + ry * Math.sin(tilt);
-
-    planetParticles.push({
-      x: rx,
-      y: yTilted,
-      z: zTilted,
-      baseColor: Math.random() > 0.45 ? '#c490e4' : (Math.random() > 0.5 ? '#70f3ff' : '#ffffff'),
-      size: Math.random() * 1.3 + 0.6,
-      type: 'ring'
-    });
+    let yTilted = ry * Math.cos(tilt) - rz * Math.sin(tilt); let zTilted = rz * Math.cos(tilt) + ry * Math.sin(tilt);
+    planetParticles.push({x: rx, y: yTilted, z: zTilted, baseColor: Math.random() > 0.45 ? '#c490e4' : (Math.random() > 0.5 ? '#70f3ff' : '#ffffff'), size: Math.random() * 1.3 + 0.6, type: 'ring'});
   }
 
-  let rotX = 0.25;
-  let rotY = 0;
-  let isDragging = false;
-  let lastMouseX = 0;
-  let lastMouseY = 0;
-
-  function onPointerDown(x, y) {
-    isDragging = true;
-    lastMouseX = x;
-    lastMouseY = y;
-  }
-  function onPointerMove(x, y) {
-    if (!isDragging) return;
-    const dx = x - lastMouseX;
-    const dy = y - lastMouseY;
-    rotY += dx * 0.008;
-    rotX += dy * 0.008;
-    rotX = Math.max(-0.6, Math.min(0.7, rotX));
-    lastMouseX = x;
-    lastMouseY = y;
-  }
+  let rotX = 0.25; let rotY = 0; let isDragging = false; let lastMouseX = 0; let lastMouseY = 0;
+  function onPointerDown(x, y) { isDragging = true; lastMouseX = x; lastMouseY = y; }
+  function onPointerMove(x, y) { if (!isDragging) return; rotY += (x - lastMouseX) * 0.008; rotX += (y - lastMouseY) * 0.008; rotX = Math.max(-0.6, Math.min(0.7, rotX)); lastMouseX = x; lastMouseY = y; }
   function onPointerUp() { isDragging = false; }
-
-  window.addEventListener('mousedown', (e) => {
-    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON') onPointerDown(e.clientX, e.clientY);
-  });
+  window.addEventListener('mousedown', (e) => { if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON') onPointerDown(e.clientX, e.clientY); });
   window.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
   window.addEventListener('mouseup', onPointerUp);
-
-  window.addEventListener('touchstart', (e) => {
-    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON') onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
-  }, {passive: true});
-  window.addEventListener('touchmove', (e) => {
-    if (isDragging) onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
-  }, {passive: true});
+  window.addEventListener('touchstart', (e) => { if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON') onPointerDown(e.touches[0].clientX, e.touches[0].clientY); }, {passive: true});
+  window.addEventListener('touchmove', (e) => { if (isDragging) onPointerMove(e.touches[0].clientX, e.touches[0].clientY); }, {passive: true});
   window.addEventListener('touchend', onPointerUp);
 
   function render() {
-    ctx.fillStyle = '#06020f';
-    ctx.fillRect(0, 0, width, height);
-
+    ctx.fillStyle = '#06020f'; ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
     for (let s of stars) {
-      const sx = (s.x / (s.z + 400)) * 500 + width / 2;
-      const sy = (s.y / (s.z + 400)) * 500 + height / 2;
-      if (sx >= 0 && sx < width && sy >= 0 && sy < height) {
-        ctx.fillRect(sx, sy, s.size, s.size);
-      }
+      const sx = (s.x / (s.z + 400)) * 500 + width / 2; const sy = (s.y / (s.z + 400)) * 500 + height / 2;
+      if (sx >= 0 && sx < width && sy >= 0 && sy < height) ctx.fillRect(sx, sy, s.size, s.size);
     }
-
     if (!isDragging) rotY += 0.004;
 
-    const cosY = Math.cos(rotY);
-    const sinY = Math.sin(rotY);
-    const cosX = Math.cos(rotX);
-    const sinX = Math.sin(rotX);
-
+    const cosY = Math.cos(rotY), sinY = Math.sin(rotY), cosX = Math.cos(rotX), sinX = Math.sin(rotX);
     const isDesktop = width > 900;
     const cakeCenterX = isDesktop ? width * 0.18 : width * 0.25;
     const planetCenterX = isDesktop ? width * 0.82 : width * 0.75;
     const centerY = height * 0.45;
     const fov = 400;
 
-    // 左侧蛋糕
     for (let p of cakeParticles) {
-      let px = p.x;
-      let py = p.y;
-      let pz = p.z;
-
-      if (p.type === 'flame') {
-        const t = Date.now() * 0.008 + p.flickerSeed;
-        px = p.ox + Math.sin(t) * 3;
-        py = p.oy - (Math.sin(t * 1.5) + 1) * 5;
-        pz = p.oz + Math.cos(t) * 3;
-      }
-
-      let x1 = px * cosY - pz * sinY;
-      let z1 = pz * cosY + px * sinY;
-      let y2 = py * cosX - z1 * sinX;
-      let z2 = z1 * cosX + py * sinX;
-
+      let px = p.x, py = p.y, pz = p.z;
+      if (p.type === 'flame') { const t = Date.now() * 0.008 + p.flickerSeed; px = p.ox + Math.sin(t) * 3; py = p.oy - (Math.sin(t * 1.5) + 1) * 5; pz = p.oz + Math.cos(t) * 3; }
+      let x1 = px * cosY - pz * sinY, z1 = pz * cosY + px * sinY, y2 = py * cosX - z1 * sinX, z2 = z1 * cosX + py * sinX;
       const zDepth = z2 + 480;
       if (zDepth > 20) {
         const scale = fov / zDepth;
-        const screenX = x1 * scale + cakeCenterX;
-        const screenY = y2 * scale + centerY;
-        const size = Math.max(0.6, p.size * scale);
-
         ctx.fillStyle = p.baseColor;
-        ctx.shadowBlur = p.type === 'flame' ? 10 : 3;
-        ctx.shadowColor = p.type === 'flame' ? '#ff9900' : '#8be9fd';
-        ctx.fillRect(screenX, screenY, size, size);
+        ctx.shadowBlur = p.type === 'flame' ? 10 : 3; ctx.shadowColor = p.type === 'flame' ? '#ff9900' : '#8be9fd';
+        ctx.fillRect(x1 * scale + cakeCenterX, y2 * scale + centerY, Math.max(0.6, p.size * scale), Math.max(0.6, p.size * scale));
       }
     }
-
-    // 右侧土星
     for (let p of planetParticles) {
-      let px = p.x;
-      let py = p.y;
-      let pz = p.z;
-
-      let x1 = px * cosY - pz * sinY;
-      let z1 = pz * cosY + px * sinY;
-      let y2 = py * cosX - z1 * sinX;
-      let z2 = z1 * cosX + py * sinX;
-
+      let x1 = p.x * cosY - p.z * sinY, z1 = p.z * cosY + p.x * sinY, y2 = p.y * cosX - z1 * sinX, z2 = z1 * cosX + p.y * sinX;
       const zDepth = z2 + 500;
       if (zDepth > 20) {
         const scale = fov / zDepth;
-        const screenX = x1 * scale + planetCenterX;
-        const screenY = y2 * scale + centerY;
-        const size = Math.max(0.6, p.size * scale);
-
         ctx.fillStyle = p.baseColor;
-        ctx.shadowBlur = p.type === 'ring' ? 6 : 4;
-        ctx.shadowColor = '#c490e4';
-        ctx.fillRect(screenX, screenY, size, size);
+        ctx.shadowBlur = p.type === 'ring' ? 6 : 4; ctx.shadowColor = '#c490e4';
+        ctx.fillRect(x1 * scale + planetCenterX, y2 * scale + centerY, Math.max(0.6, p.size * scale), Math.max(0.6, p.size * scale));
       }
     }
-
     requestAnimationFrame(render);
   }
   render();
 
-  // ==================== 2. 极致丝滑：纯 CSS 幻影鲸鱼转场引擎 ====================
+  // ==================== 2. 极致丝滑：纯 CSS 极简 3-2-1 蓝色荧光倒计时 ====================
   function triggerWhaleTransition() {
     const bgOverlay = document.getElementById('warpBackground');
     const cdOverlay = document.getElementById('countdownOverlay');
     const numEl = document.getElementById('countdownNum');
-    const tipEl = document.getElementById('countdownTip');
 
-    // 唤出深海鲸鱼背景和数字遮罩层
     bgOverlay.classList.add('active');
     cdOverlay.classList.add('active');
 
-    // 辅助函数：触发数字弹出动画
-    function popNumber(num, text = null) {
-      numEl.classList.remove('pop');
-      void numEl.offsetWidth; // 触发重绘，重置CSS动画
-      numEl.innerText = num;
-      numEl.classList.add('pop');
-      if (text) {
-        tipEl.innerText = text;
-        tipEl.classList.add('show');
-      }
+    function animateNumber(num, startDelay) {
+      setTimeout(() => {
+        numEl.classList.remove('pop');
+        void numEl.offsetWidth; // 触发 CSS 重绘，保证动画完美执行
+        numEl.innerText = num;
+        numEl.classList.add('pop');
+      }, startDelay);
     }
 
-    // 3 - 2 - 1 丝滑调度
-    setTimeout(() => {
-      popNumber(3);
-      playCrystalNote(523.25);
-    }, 100);
-
-    setTimeout(() => {
-      popNumber(2);
-      playCrystalNote(659.25);
-    }, 1100);
-
-    setTimeout(() => {
-      popNumber(1);
-      playCrystalNote(783.99);
-    }, 2100);
-
-    setTimeout(() => {
-      popNumber("START!", "✨ DIVING INTO THE STAR OCEAN ✨");
-      playCrystalNote(1046.50);
-    }, 3100);
-
-    // 4.5秒后自动淡出转场，进入主舞台
+    animateNumber("3", 100);    setTimeout(() => playCrystalNote(523.25), 100);
+    animateNumber("2", 1100);   setTimeout(() => playCrystalNote(659.25), 1100);
+    animateNumber("1", 2100);   setTimeout(() => playCrystalNote(783.99), 2100);
+    
+    // 淡出转场
     setTimeout(() => {
       bgOverlay.classList.remove('active');
       cdOverlay.classList.remove('active');
-      tipEl.classList.remove('show');
-      
       document.getElementById('stageLetter').classList.add('hidden');
       document.getElementById('stageMain').classList.remove('hidden');
-      
       if (audioPlayer.paused) playCurrentSong();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 4500);
+    }, 3100);
   }
 
-  // ==================== 3. 音乐与贺卡交互逻辑 ====================
+  // ==================== 3. 音乐与 UI 逻辑 ====================
   let age = 21;
   const userName = "紫惠";
-
-  const songs = [
-    {
-      name: "生日快乐歌",
-      artist: "祝你生日快乐",
-      url: "./shengrige.mp3"
-    },
-    {
-      name: "现在那边是几点",
-      artist: "黄小琥",
-      url: "./xianzainabian.mp3"
-    },
-    {
-      name: "夢醒時分",
-      artist: "陳淑樺",
-      url: "./mengxingshifen.mp3"
-    }
-  ];
-
+  const songs = [ { name: "生日快乐歌", artist: "祝你生日快乐", url: "./shengrige.mp3" }, { name: "现在那边是几点", artist: "黄小琥", url: "./xianzainabian.mp3" }, { name: "夢醒時分", artist: "陳淑樺", url: "./mengxingshifen.mp3" } ];
   let currentTrack = 0;
   const audioPlayer = document.getElementById('realAudioPlayer');
   audioPlayer.volume = 0.5;
 
   function playCurrentSong() {
-    if (audioPlayer.src !== new URL(songs[currentTrack].url, window.location.href).href) {
-      audioPlayer.src = songs[currentTrack].url;
-    }
-    audioPlayer.play().then(() => {
-      updateMusicUI(true);
-    }).catch(err => {
-      console.log("Audio autoplay note:", err);
-    });
+    if (audioPlayer.src !== new URL(songs[currentTrack].url, window.location.href).href) audioPlayer.src = songs[currentTrack].url;
+    audioPlayer.play().then(() => updateMusicUI(true)).catch(err => console.log("Auto play prevented"));
   }
-
-  function stopCurrentSong() {
-    audioPlayer.pause();
-    updateMusicUI(false);
-  }
+  function stopCurrentSong() { audioPlayer.pause(); updateMusicUI(false); }
 
   function updateMusicUI(isPlaying) {
-    const playBtn = document.getElementById('btnPlayMusic');
-    const toggleBtn = document.getElementById('musicToggle');
-    const disk = document.getElementById('recordDisk');
-    const statusText = document.getElementById('diskStatus');
+    const playBtn = document.getElementById('btnPlayMusic'), toggleBtn = document.getElementById('musicToggle'), disk = document.getElementById('recordDisk'), statusText = document.getElementById('diskStatus');
     const curSong = songs[currentTrack];
-
     if (isPlaying) {
-      if (playBtn) {
-        playBtn.innerText = "■ 停止原版声乐";
-        playBtn.classList.add('playing');
-      }
+      if (playBtn) { playBtn.innerText = "■ 停止原版声乐"; playBtn.classList.add('playing'); }
       toggleBtn.classList.add('playing');
       if (disk) disk.classList.add('spinning');
-      if (statusText) {
-        statusText.innerText = `正在播放:《${curSong.name}》- ${curSong.artist}`;
-        statusText.style.color = "var(--accent-yellow)";
-      }
+      if (statusText) { statusText.innerText = `正在播放:《${curSong.name}》- ${curSong.artist}`; statusText.style.color = "var(--accent-yellow)"; }
     } else {
-      if (playBtn) {
-        playBtn.innerText = "▶ 开启原版声乐";
-        playBtn.classList.remove('playing');
-      }
+      if (playBtn) { playBtn.innerText = "▶ 开启原版声乐"; playBtn.classList.remove('playing'); }
       toggleBtn.classList.remove('playing');
       if (disk) disk.classList.remove('spinning');
-      if (statusText) {
-        statusText.innerText = "八音盒未启动";
-        statusText.style.color = "#a491c3";
-      }
+      if (statusText) { statusText.innerText = "八音盒未启动"; statusText.style.color = "#a491c3"; }
     }
   }
 
-  function userInteractPlay() {
-    if (audioPlayer.paused) {
-      currentTrack = 0;
-      playCurrentSong();
-    }
-    window.removeEventListener('click', userInteractPlay);
-    window.removeEventListener('touchstart', userInteractPlay);
-  }
-  window.addEventListener('click', userInteractPlay);
-  window.addEventListener('touchstart', userInteractPlay);
+  function userInteractPlay() { if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); } window.removeEventListener('click', userInteractPlay); window.removeEventListener('touchstart', userInteractPlay); }
+  window.addEventListener('click', userInteractPlay); window.addEventListener('touchstart', userInteractPlay);
 
-  document.getElementById('btnPlayMusic').onclick = (e) => {
-    e.stopPropagation();
-    if (!audioPlayer.paused) stopCurrentSong();
-    else playCurrentSong();
-  };
-
-  document.getElementById('musicToggle').onclick = (e) => {
-    e.stopPropagation();
-    if (!audioPlayer.paused) stopCurrentSong();
-    else playCurrentSong();
-  };
-
-  document.querySelectorAll('.vol-btn').forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      document.querySelectorAll('.vol-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      audioPlayer.volume = parseFloat(e.target.dataset.vol);
-    };
-  });
-
-  document.querySelectorAll('.track-tab').forEach(tab => {
-    tab.onclick = (e) => {
-      e.stopPropagation();
-      document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
-      e.target.classList.add('active');
-      currentTrack = parseInt(e.target.dataset.index);
-
-      if (!audioPlayer.paused) {
-        playCurrentSong();
-      } else {
-        const curSong = songs[currentTrack];
-        document.getElementById('diskStatus').innerText = `已选曲目:《${curSong.name}》`;
-      }
-    };
-  });
+  document.getElementById('btnPlayMusic').onclick = (e) => { e.stopPropagation(); if (!audioPlayer.paused) stopCurrentSong(); else playCurrentSong(); };
+  document.getElementById('musicToggle').onclick = (e) => { e.stopPropagation(); if (!audioPlayer.paused) stopCurrentSong(); else playCurrentSong(); };
+  document.querySelectorAll('.vol-btn').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); document.querySelectorAll('.vol-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); audioPlayer.volume = parseFloat(e.target.dataset.vol); }; });
+  document.querySelectorAll('.track-tab').forEach(tab => { tab.onclick = (e) => { e.stopPropagation(); document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active')); e.target.classList.add('active'); currentTrack = parseInt(e.target.dataset.index); if (!audioPlayer.paused) playCurrentSong(); else document.getElementById('diskStatus').innerText = `已选曲目:《${songs[currentTrack].name}》`; }; });
 
   let audioCtx = null;
   function playCrystalNote(freq) {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(freq, now);
-
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + 1.2);
+    const now = audioCtx.currentTime; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+    osc.type = 'triangle'; osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + 1.2);
   }
 
-  document.getElementById('btnDec').onclick = (e) => {
-    e.stopPropagation();
-    if (age > 1) {
-      age--;
-      document.getElementById('valAge').innerText = age;
-    }
-    if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); }
-  };
-
-  document.getElementById('btnInc').onclick = (e) => {
-    e.stopPropagation();
-    age++;
-    document.getElementById('valAge').innerText = age;
-    if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); }
-  };
-
-  document.getElementById('btnLaunch').onclick = (e) => {
-    e.stopPropagation();
-    if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); }
-    document.querySelectorAll('.render-name').forEach(el => el.innerText = userName);
-    document.querySelectorAll('.render-age').forEach(el => el.innerText = age);
-
-    document.getElementById('stageConfig').classList.add('hidden');
-    document.getElementById('stageLetter').classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // 点击信封启动：深海幻影鲸鱼转场
-  document.getElementById('envelopeBox').onclick = () => {
-    triggerWhaleTransition();
-  };
-
-  function petSay(msg) {
-    playCrystalNote(880);
-    document.getElementById('mascotBubble').innerText = msg;
-  }
+  document.getElementById('btnDec').onclick = (e) => { e.stopPropagation(); if (age > 1) { age--; document.getElementById('valAge').innerText = age; } if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); } };
+  document.getElementById('btnInc').onclick = (e) => { e.stopPropagation(); age++; document.getElementById('valAge').innerText = age; if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); } };
+  document.getElementById('btnLaunch').onclick = (e) => { e.stopPropagation(); if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); } document.querySelectorAll('.render-name').forEach(el => el.innerText = userName); document.querySelectorAll('.render-age').forEach(el => el.innerText = age); document.getElementById('stageConfig').classList.add('hidden'); document.getElementById('stageLetter').classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  document.getElementById('envelopeBox').onclick = () => { triggerWhaleTransition(); };
+  function petSay(msg) { playCrystalNote(880); document.getElementById('mascotBubble').innerText = msg; }
 
   const avatarObj = document.getElementById('avatarObj');
-
-  document.getElementById('typeGroup').addEventListener('click', (e) => {
-    if (e.target.dataset.val) {
-      document.querySelectorAll('#typeGroup .opt-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      avatarObj.innerText = e.target.dataset.val;
-      playCrystalNote(659);
-    }
-  });
-
-  document.getElementById('colorGroup').addEventListener('click', (e) => {
-    if (e.target.dataset.color) {
-      document.querySelectorAll('#colorGroup .opt-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      avatarObj.style.filter = `drop-shadow(0 0 10px ${e.target.dataset.color})`;
-      playCrystalNote(783);
-    }
-  });
-
-  document.getElementById('animGroup').addEventListener('click', (e) => {
-    if (e.target.dataset.anim) {
-      document.querySelectorAll('#animGroup .opt-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      avatarObj.className = 'pixel-avatar ' + e.target.dataset.anim;
-      playCrystalNote(523);
-    }
-  });
+  document.getElementById('typeGroup').addEventListener('click', (e) => { if (e.target.dataset.val) { document.querySelectorAll('#typeGroup .opt-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); avatarObj.innerText = e.target.dataset.val; playCrystalNote(659); } });
+  document.getElementById('colorGroup').addEventListener('click', (e) => { if (e.target.dataset.color) { document.querySelectorAll('#colorGroup .opt-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); avatarObj.style.filter = `drop-shadow(0 0 10px ${e.target.dataset.color})`; playCrystalNote(783); } });
+  document.getElementById('animGroup').addEventListener('click', (e) => { if (e.target.dataset.anim) { document.querySelectorAll('#animGroup .opt-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); avatarObj.className = 'pixel-avatar ' + e.target.dataset.anim; playCrystalNote(523); } });
 
   let candleBlown = false;
-
   function submitWishAndBlow() {
     if (candleBlown) return;
-    
-    const wishInput = document.getElementById('wishInput');
-    const wishText = wishInput.value.trim();
-    if (!wishText) {
-      alert("请在输入框先写下你的愿望，再吹灭蜡烛哦 ✨");
-      return;
-    }
-
-    candleBlown = true;
-    document.getElementById('flameObj').classList.add('off');
-    playCrystalNote(1567.98);
-
-    document.getElementById('formLevel').value = `Level ${age}`;
-    document.getElementById('formTime').value = new Date().toLocaleString();
-    document.getElementById('formSubject').value = `✨【紫惠许下的生日愿望】: ${wishText}`;
-    
+    const wishInput = document.getElementById('wishInput'); const wishText = wishInput.value.trim();
+    if (!wishText) { alert("请在输入框先写下你的愿望，再吹灭蜡烛哦 ✨"); return; }
+    candleBlown = true; document.getElementById('flameObj').classList.add('off'); playCrystalNote(1567.98);
+    document.getElementById('formLevel').value = `Level ${age}`; document.getElementById('formTime').value = new Date().toLocaleString(); document.getElementById('formSubject').value = `✨【紫惠许下的生日愿望】: ${wishText}`;
     document.getElementById('wishForm').submit();
-
-    document.getElementById('candleHint').innerText = "✨ 愿望已成功送达星系 ✨";
-    document.getElementById('candleHint').style.color = "var(--accent-pink)";
-    wishInput.disabled = true;
-    
-    const sendBtn = document.getElementById('btnSendWish');
-    sendBtn.innerText = "🎉 心愿已达成打包发送 🎉";
-    sendBtn.style.background = "#5a4282";
-    sendBtn.style.color = "#fff";
-    sendBtn.disabled = true;
-
+    document.getElementById('candleHint').innerText = "✨ 愿望已成功送达星系 ✨"; document.getElementById('candleHint').style.color = "var(--accent-pink)"; wishInput.disabled = true;
+    const sendBtn = document.getElementById('btnSendWish'); sendBtn.innerText = "🎉 心愿已达成打包发送 🎉"; sendBtn.style.background = "#5a4282"; sendBtn.style.color = "#fff"; sendBtn.disabled = true;
     alert("🎉 蜡烛吹灭！愿望已经悄悄打包送出，愿紫惠新的一岁所有的美好如期而至！🎂✨");
   }
 </script>
