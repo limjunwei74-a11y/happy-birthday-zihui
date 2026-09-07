@@ -757,7 +757,7 @@
       </div>
 
       <div class="playlist-box">
-        <div class="track-tab active" data-index="0">夢田</div>
+        <div class="track-tab active" data-index="0">生日歌</div>
         <div class="track-tab" data-index="1">现在那边是几点</div>
         <div class="track-tab" data-index="2">夢醒時分</div>
       </div>
@@ -767,7 +767,7 @@
     <div class="pixel-box">
       <div class="tag-badge">HAPPY BIRTHDAY LETTER</div>
       <div style="font-size: 15px; font-weight: bold; color: #fff; margin-bottom: 14px; border-bottom: 1px dashed #5a4282; padding-bottom: 8px;">
-        TO DEAR 紫惠酱 🌸
+        TO DEAR 紫惠 🌸
       </div>
 
       <div id="letterText" style="font-size: 13px; line-height: 1.9; color: #ded4ee; min-height: 140px;">
@@ -781,7 +781,7 @@
       </div>
     </div>
 
-    <!-- 许愿池（使用隐藏 iframe 实现无跳转且 100% 稳定投递） -->
+    <!-- 许愿池 -->
     <div class="pixel-box" style="text-align: center;">
       <div class="tag-badge">WISHING WELL</div>
       <div class="box-title">秘密星心许愿池 (Wishing Well)</div>
@@ -818,9 +818,9 @@
 
   const songs = [
     {
-      name: "夢田",
-      artist: "齊豫",
-      url: "./mengtian.mp3"
+      name: "生日快乐歌",
+      artist: "祝你生日快乐",
+      url: "./shengrige.mp3"
     },
     {
       name: "现在那边是几点",
@@ -839,11 +839,13 @@
   audioPlayer.volume = 0.5;
 
   function playCurrentSong() {
-    audioPlayer.src = songs[currentTrack].url;
+    if (audioPlayer.src !== new URL(songs[currentTrack].url, window.location.href).href) {
+      audioPlayer.src = songs[currentTrack].url;
+    }
     audioPlayer.play().then(() => {
       updateMusicUI(true);
     }).catch(err => {
-      console.log("Audio play err: ", err);
+      console.log("Audio autoplay prevented by browser:", err);
     });
   }
 
@@ -860,34 +862,58 @@
     const curSong = songs[currentTrack];
 
     if (isPlaying) {
-      playBtn.innerText = "■ 停止原版声乐";
-      playBtn.classList.add('playing');
+      if (playBtn) {
+        playBtn.innerText = "■ 停止原版声乐";
+        playBtn.classList.add('playing');
+      }
       toggleBtn.classList.add('playing');
-      disk.classList.add('spinning');
-      statusText.innerText = `正在播放:《${curSong.name}》- ${curSong.artist}`;
-      statusText.style.color = "var(--accent-yellow)";
+      if (disk) disk.classList.add('spinning');
+      if (statusText) {
+        statusText.innerText = `正在播放:《${curSong.name}》- ${curSong.artist}`;
+        statusText.style.color = "var(--accent-yellow)";
+      }
     } else {
-      playBtn.innerText = "▶ 开启原版声乐";
-      playBtn.classList.remove('playing');
+      if (playBtn) {
+        playBtn.innerText = "▶ 开启原版声乐";
+        playBtn.classList.remove('playing');
+      }
       toggleBtn.classList.remove('playing');
-      disk.classList.remove('spinning');
-      statusText.innerText = "八音盒未启动";
-      statusText.style.color = "#a491c3";
+      if (disk) disk.classList.remove('spinning');
+      if (statusText) {
+        statusText.innerText = "八音盒未启动";
+        statusText.style.color = "#a491c3";
+      }
     }
   }
 
-  document.getElementById('btnPlayMusic').onclick = () => {
+  // 第一页用户任意轻触时立即激活播放生日歌
+  function userInteractPlay() {
+    if (audioPlayer.paused) {
+      currentTrack = 0;
+      playCurrentSong();
+    }
+    // 移除全局监听
+    window.removeEventListener('click', userInteractPlay);
+    window.removeEventListener('touchstart', userInteractPlay);
+  }
+  window.addEventListener('click', userInteractPlay);
+  window.addEventListener('touchstart', userInteractPlay);
+
+  document.getElementById('btnPlayMusic').onclick = (e) => {
+    e.stopPropagation();
     if (!audioPlayer.paused) stopCurrentSong();
     else playCurrentSong();
   };
 
-  document.getElementById('musicToggle').onclick = () => {
+  document.getElementById('musicToggle').onclick = (e) => {
+    e.stopPropagation();
     if (!audioPlayer.paused) stopCurrentSong();
     else playCurrentSong();
   };
 
   document.querySelectorAll('.vol-btn').forEach(btn => {
     btn.onclick = (e) => {
+      e.stopPropagation();
       document.querySelectorAll('.vol-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
       audioPlayer.volume = parseFloat(e.target.dataset.vol);
@@ -896,6 +922,7 @@
 
   document.querySelectorAll('.track-tab').forEach(tab => {
     tab.onclick = (e) => {
+      e.stopPropagation();
       document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
       e.target.classList.add('active');
       currentTrack = parseInt(e.target.dataset.index);
@@ -929,18 +956,25 @@
     osc.stop(now + 1.2);
   }
 
-  document.getElementById('btnDec').onclick = () => {
+  document.getElementById('btnDec').onclick = (e) => {
+    e.stopPropagation();
     if (age > 1) {
       age--;
       document.getElementById('valAge').innerText = age;
     }
-  };
-  document.getElementById('btnInc').onclick = () => {
-    age++;
-    document.getElementById('valAge').innerText = age;
+    if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); }
   };
 
-  document.getElementById('btnLaunch').onclick = () => {
+  document.getElementById('btnInc').onclick = (e) => {
+    e.stopPropagation();
+    age++;
+    document.getElementById('valAge').innerText = age;
+    if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); }
+  };
+
+  document.getElementById('btnLaunch').onclick = (e) => {
+    e.stopPropagation();
+    if (audioPlayer.paused) { currentTrack = 0; playCurrentSong(); }
     document.querySelectorAll('.render-name').forEach(el => el.innerText = userName);
     document.querySelectorAll('.render-age').forEach(el => el.innerText = age);
 
@@ -952,7 +986,7 @@
   document.getElementById('envelopeBox').onclick = () => {
     document.getElementById('stageLetter').classList.add('hidden');
     document.getElementById('stageMain').classList.remove('hidden');
-    playCurrentSong();
+    if (audioPlayer.paused) playCurrentSong();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
