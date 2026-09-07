@@ -41,7 +41,7 @@
     position: relative;
   }
 
-  /* 3D 全屏背景 Canvas */
+  /* 3D 蛋糕与土星全屏 Canvas 背景 */
   #bgCanvas {
     position: fixed;
     top: 0;
@@ -53,6 +53,65 @@
   }
   #bgCanvas:active {
     cursor: grabbing;
+  }
+
+  /* 穿越流星雨专用覆盖层 Canvas */
+  #meteorCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  #meteorCanvas.active {
+    opacity: 1;
+  }
+
+  /* 3-2-1 倒计时 HUD */
+  #countdownOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  #countdownOverlay.active {
+    opacity: 1;
+  }
+
+  .countdown-num {
+    font-family: var(--font-pixel);
+    font-size: 80px;
+    color: #fff;
+    text-shadow: 0 0 20px #70f3ff, 0 0 40px #3877ff, 4px 4px 0 #120924;
+    animation: zoomPulse 0.9s infinite ease-out;
+  }
+
+  .countdown-tip {
+    font-family: var(--font-pixel);
+    font-size: 13px;
+    color: #70f3ff;
+    letter-spacing: 3px;
+    margin-top: 18px;
+    text-shadow: 0 0 10px #3877ff;
+  }
+
+  @keyframes zoomPulse {
+    0% { transform: scale(0.6); opacity: 0; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1.3); opacity: 0; }
   }
 
   .screen-container {
@@ -603,6 +662,15 @@
 <!-- 3D 蛋糕与土星全屏 Canvas 背景 -->
 <canvas id="bgCanvas"></canvas>
 
+<!-- 穿越流星雨全屏特效 Canvas -->
+<canvas id="meteorCanvas"></canvas>
+
+<!-- 3-2-1 倒计时特效覆盖层 -->
+<div id="countdownOverlay">
+  <div class="countdown-num" id="countdownNum">3</div>
+  <div class="countdown-tip" id="countdownTip">✨ WARPING THROUGH METEOR SHOWER ✨</div>
+</div>
+
 <audio id="realAudioPlayer" preload="auto" loop></audio>
 
 <div class="music-toggle" id="musicToggle" title="背景八音盒">🔔</div>
@@ -830,7 +898,7 @@
 </div>
 
 <script>
-  // ==================== 3D 左蛋糕 + 右紫色土星引擎 ====================
+  // ==================== 1. 3D 左蛋糕 + 右紫色土星背景 ====================
   const canvas = document.getElementById('bgCanvas');
   const ctx = canvas.getContext('2d');
 
@@ -840,6 +908,8 @@
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
+    mCanvas.width = width;
+    mCanvas.height = height;
   });
 
   const stars = [];
@@ -852,7 +922,7 @@
     });
   }
 
-  // 1. 生成 3D 蛋糕粒子（三层蛋糕 + 三支蜡烛火焰）
+  // 3D 蛋糕粒子
   const cakeParticles = [];
   function createTier(radius, heightStart, heightEnd, numParticles) {
     for (let i = 0; i < numParticles; i++) {
@@ -871,9 +941,9 @@
       });
     }
   }
-  createTier(130, 45, 95, 1200);   // 底层
-  createTier(95, -5, 45, 900);     // 中层
-  createTier(60, -55, -5, 700);    // 顶层
+  createTier(130, 45, 95, 1200);
+  createTier(95, -5, 45, 900);
+  createTier(60, -55, -5, 700);
 
   const candlePositions = [
     {x: -24, y: -75, z: -6},
@@ -907,11 +977,9 @@
     }
   });
 
-  // 2. 生成 3D 紫色土星粒子（紫色球体 + 倾斜绚丽光环）
+  // 3D 紫色土星粒子
   const planetParticles = [];
   const planetRadius = 90;
-  
-  // 星球本体（球体表面随机分布）
   for (let i = 0; i < 1400; i++) {
     const u = Math.random();
     const v = Math.random();
@@ -928,18 +996,15 @@
     });
   }
 
-  // 土星星环粒子（环绕椭圆盘）
   const ringInner = 120;
   const ringOuter = 210;
   for (let i = 0; i < 2200; i++) {
     const angle = Math.random() * Math.PI * 2;
     const dist = ringInner + Math.random() * (ringOuter - ringInner);
-    // 初始平面坐标
     let rx = Math.cos(angle) * dist;
     let ry = (Math.random() - 0.5) * 5;
     let rz = Math.sin(angle) * dist;
 
-    // 倾斜光环角度（约 26度 倾斜）
     const tilt = 0.45;
     let yTilted = ry * Math.cos(tilt) - rz * Math.sin(tilt);
     let zTilted = rz * Math.cos(tilt) + ry * Math.sin(tilt);
@@ -954,7 +1019,6 @@
     });
   }
 
-  // 3D 交互控制
   let rotX = 0.25;
   let rotY = 0;
   let isDragging = false;
@@ -996,7 +1060,6 @@
     ctx.fillStyle = '#06020f';
     ctx.fillRect(0, 0, width, height);
 
-    // 绘制深空背景微弱繁星
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
     for (let s of stars) {
       const sx = (s.x / (s.z + 400)) * 500 + width / 2;
@@ -1013,14 +1076,13 @@
     const cosX = Math.cos(rotX);
     const sinX = Math.sin(rotX);
 
-    // 动态计算左右两侧物体的中心位置（大屏分列左右，窄屏自适应）
     const isDesktop = width > 900;
     const cakeCenterX = isDesktop ? width * 0.18 : width * 0.25;
     const planetCenterX = isDesktop ? width * 0.82 : width * 0.75;
     const centerY = height * 0.45;
     const fov = 400;
 
-    // 绘制左侧 3D 蛋糕
+    // 左侧蛋糕
     for (let p of cakeParticles) {
       let px = p.x;
       let py = p.y;
@@ -1052,13 +1114,12 @@
       }
     }
 
-    // 绘制右侧 3D 紫色土星
+    // 右侧土星
     for (let p of planetParticles) {
       let px = p.x;
       let py = p.y;
       let pz = p.z;
 
-      // 叠加稍微不同的旋转速度，更显星空灵动
       let x1 = px * cosY - pz * sinY;
       let z1 = pz * cosY + px * sinY;
       let y2 = py * cosX - z1 * sinX;
@@ -1082,7 +1143,113 @@
   }
   render();
 
-  // ==================== 音乐与贺卡交互逻辑 ====================
+  // ==================== 2. 穿越流星雨引擎 (Meteor Warp Engine) ====================
+  const mCanvas = document.getElementById('meteorCanvas');
+  const mCtx = mCanvas.getContext('2d');
+  mCanvas.width = width;
+  mCanvas.height = height;
+
+  let isWarping = false;
+  let warpSpeed = 8;
+  const meteors = [];
+
+  for (let i = 0; i < 350; i++) {
+    meteors.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      len: Math.random() * 80 + 30,
+      speed: Math.random() * 12 + 10,
+      width: Math.random() * 2.2 + 1,
+      color: Math.random() > 0.4 ? '#38bdf8' : (Math.random() > 0.5 ? '#818cf8' : '#e0e7ff')
+    });
+  }
+
+  function renderMeteors() {
+    if (!isWarping) return;
+    mCtx.fillStyle = 'rgba(6, 2, 20, 0.28)';
+    mCtx.fillRect(0, 0, width, height);
+
+    for (let m of meteors) {
+      m.y += m.speed * (warpSpeed / 10);
+      if (m.y > height + 100) {
+        m.y = -100;
+        m.x = Math.random() * width;
+      }
+
+      const grad = mCtx.createLinearGradient(m.x, m.y - m.len, m.x, m.y);
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      grad.addColorStop(0.7, m.color);
+      grad.addColorStop(1, '#ffffff');
+
+      mCtx.strokeStyle = grad;
+      mCtx.lineWidth = m.width;
+      mCtx.lineCap = 'round';
+      mCtx.beginPath();
+      mCtx.moveTo(m.x, m.y - m.len * (warpSpeed / 12));
+      mCtx.lineTo(m.x, m.y);
+      mCtx.stroke();
+
+      // 头部光晕
+      mCtx.fillStyle = '#ffffff';
+      mCtx.shadowBlur = 10;
+      mCtx.shadowColor = '#38bdf8';
+      mCtx.beginPath();
+      mCtx.arc(m.x, m.y, m.width * 1.2, 0, Math.PI * 2);
+      mCtx.fill();
+    }
+    requestAnimationFrame(renderMeteors);
+  }
+
+  // 3-2-1 倒计时并触发流星雨穿越
+  function triggerWarpTransition() {
+    isWarping = true;
+    mCanvas.classList.add('active');
+    renderMeteors();
+
+    const overlay = document.getElementById('countdownOverlay');
+    const numEl = document.getElementById('countdownNum');
+    const tipEl = document.getElementById('countdownTip');
+
+    overlay.classList.add('active');
+
+    let count = 3;
+    numEl.innerText = count;
+    warpSpeed = 15;
+    playCrystalNote(523.25);
+
+    const timer = setInterval(() => {
+      count--;
+      if (count === 2) {
+        numEl.innerText = "2";
+        warpSpeed = 26;
+        playCrystalNote(659.25);
+      } else if (count === 1) {
+        numEl.innerText = "1";
+        warpSpeed = 42;
+        tipEl.innerText = "🚀 SPEED REACHING MAXIMUM! 🚀";
+        playCrystalNote(783.99);
+      } else if (count === 0) {
+        numEl.innerText = "START!";
+        warpSpeed = 60;
+        playCrystalNote(1046.50);
+      } else {
+        clearInterval(timer);
+        // 结束穿越，进入主舞台
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          mCanvas.classList.remove('active');
+          isWarping = false;
+
+          document.getElementById('stageLetter').classList.add('hidden');
+          document.getElementById('stageMain').classList.remove('hidden');
+          if (audioPlayer.paused) playCurrentSong();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 600);
+      }
+    }, 1000);
+  }
+
+  // ==================== 3. 音乐与贺卡交互逻辑 ====================
   let age = 21;
   const userName = "紫惠";
 
@@ -1251,11 +1418,9 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // 点击信封启动 3-2-1 穿越流星雨转场
   document.getElementById('envelopeBox').onclick = () => {
-    document.getElementById('stageLetter').classList.add('hidden');
-    document.getElementById('stageMain').classList.remove('hidden');
-    if (audioPlayer.paused) playCurrentSong();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    triggerWarpTransition();
   };
 
   function petSay(msg) {
